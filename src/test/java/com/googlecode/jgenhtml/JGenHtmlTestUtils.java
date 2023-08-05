@@ -159,7 +159,7 @@ public class JGenHtmlTestUtils
 	private static void addPathAndEnsureExists(final String[] traceFiles)
 	{
 		File dir = getTestDir();
-		for(int i=0; i<traceFiles.length; i++)//append the full path to the file names and make sure they actually exist
+		for(int i=0; i<traceFiles.length; i++)  // append the full path to the file names and make sure they actually exist
 		{
 			String name = traceFiles[i];
 			traceFiles[i] = dir.getAbsolutePath() + File.separatorChar + name;
@@ -204,7 +204,7 @@ public class JGenHtmlTestUtils
 		try
 		{
 			List<String> lines = new ArrayList<String>();
-			//throw in a few comments and stuff
+			// throw in a few comments and stuff
 			lines.add("#");
 			lines.add("#jgenthml test file");
 			lines.add("#");
@@ -290,10 +290,10 @@ public class JGenHtmlTestUtils
 		return sdf.format(new Date());
 	}
 
-	//first dimension
+	// first dimension
 	static final int LINES = 0;
 
-	//second dimension
+	// second dimension
 	static final int HIT = 0;
 	static final int TOTAL = 1;
 

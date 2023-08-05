@@ -48,7 +48,7 @@ public abstract class CoverageIndexPage extends CoveragePage
 	 */
 	void addSourceFile(final CoveragePage page, final boolean usePath)
 	{
-		this.addValuesFromPage(page);//add the values from the page to this index page
+		this.addValuesFromPage(page);  // add the values from the page to this index page
 		Document document = this.getDoc();
 		Element source = document.createElement("source");
 		sources.appendChild(source);

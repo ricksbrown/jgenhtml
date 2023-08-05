@@ -297,7 +297,7 @@ public class JGenHtmlUtils
 		}
 
 		String result = null;
-		//Find and return prefix with minimal sum
+		// Find and return prefix with minimal sum
 		for(String current : keys)
 		{
 			if(result == null)

@@ -49,7 +49,7 @@ public class JGenXmlTest extends TestCase
 		try
 		{
 			File outputDir = JGenHtmlTestUtils.getTestDir();
-			FileUtils.cleanDirectory(outputDir);//START WITH A CLEAN DIRECTORY!
+			FileUtils.cleanDirectory(outputDir);  // START WITH A CLEAN DIRECTORY!
 			String outputDirPath = outputDir.getAbsolutePath();
 			String traceFile = JGenHtmlTestUtils.getJstdTraceFiles(false, false)[0];
 			String[] argv = new String[]{"-o", outputDirPath, traceFile};

@@ -70,7 +70,7 @@ public final class CoverageReport
 		processTraceFiles();
 		checkProcessBaselineFile(config.getBaseFile());
 		checkGenerateDescriptions(config.getDescFile());
-		removePrefix();//check if there is a common prefix and strip it
+		removePrefix();  // check if there is a common prefix and strip it
 	}
 
 	/**

@@ -37,7 +37,7 @@ public class Line extends SourceCode
 	 */
 	public Line(final int lineNumber)
 	{
-		super(false);//by default assume the line is not executable
+		super(false);  // by default assume the line is not executable
 		setLineNo(lineNumber);
 	}
 

@@ -53,7 +53,7 @@ public final class Config
 	private boolean keepDescriptions = false;
 	private boolean noPrefix = false;
 	private String prefix = null;
-	private int numSpaces = -1;//the default in genhtml is 8 but I want to leave tabs alone by default
+	private int numSpaces = -1;  // the default in genhtml is 8 but I want to leave tabs alone by default
 	private boolean noSource = false;
 	private boolean noSort = false;
 	private byte hiLimit = 90;
@@ -100,7 +100,7 @@ public final class Config
 		EPILOG("html-epilog"),
 		HTML_EXT("html-extension"),
 		GZIP("html-gzip"),
-		SORT("sort"),//what the heck point is this?
+		SORT("sort"),  // what the heck point is this?
 		NOSORT("no-sort"),
 		CONFFILE("config-file"),
 		DEMANGLE("demangle-cpp");
@@ -357,7 +357,7 @@ public final class Config
 	{
 		try
 		{
-			//don't use FileUtils.getUserDirectoryPath() here, it was causing issues when run from Ant
+			// don't use FileUtils.getUserDirectoryPath() here, it was causing issues when run from Ant
 			String lcovrc = System.getProperty("user.home") + File.separatorChar + ".lcovrc";
 			Properties properties = loadFileToProperties(alternatePath);
 			if(properties != null || (properties = loadFileToProperties(lcovrc)) != null)
@@ -853,7 +853,7 @@ public final class Config
 	 */
 	private void setNumSpaces(final int numspaces)
 	{
-		if(numspaces >= 0)//is zero too low?
+		if(numspaces >= 0)  // is zero too low?
 		{
 			this.numSpaces = numspaces;
 		}
@@ -873,7 +873,7 @@ public final class Config
 	 */
 	private void setHiLimit(final int hiLimit)
 	{
-		if(hiLimit > 0 && hiLimit <= 100)//genhtml just accepts whatever
+		if(hiLimit > 0 && hiLimit <= 100)  // genhtml just accepts whatever
 		{
 			this.hiLimit = (byte)hiLimit;
 		}
@@ -894,7 +894,7 @@ public final class Config
 	 */
 	private void setMedLimit(final int medLimit)
 	{
-		if(medLimit > 0 && medLimit <= 100)//genhtml just accepts whatever
+		if(medLimit > 0 && medLimit <= 100)  // genhtml just accepts whatever
 		{
 			this.medLimit = (byte)medLimit;
 		}
@@ -988,7 +988,7 @@ public final class Config
 			{
 				result = new Properties();
 				String propFileContent = FileUtils.readFileToString(configFile);
-				propFileContent = propFileContent.replace("\\", "\\\\");//can't expect the lcov config file to escape backslashes
+				propFileContent = propFileContent.replace("\\", "\\\\");  // can't expect the lcov config file to escape backslashes
 				result.load(new StringReader(propFileContent));
 			}
 		}

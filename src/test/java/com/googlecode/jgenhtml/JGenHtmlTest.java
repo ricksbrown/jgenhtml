@@ -591,7 +591,7 @@ public class JGenHtmlTest extends TestCase
 		for(int i=0; i<candidates.getLength(); i++)
 		{
 			Element next = (Element)candidates.item(i);
-			if(className == null || className.equals(next.getAttribute("class")))//todo find a space separated list
+			if(className == null || className.equals(next.getAttribute("class")))  // todo find a space separated list
 			{
 				result.add(next);
 			}

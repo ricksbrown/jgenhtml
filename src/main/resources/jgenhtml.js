@@ -15,7 +15,7 @@
  */
 (function()
 {
-	"use strict";//is there any other mode?
+	"use strict";  // is there any other mode?
 
 	/**
 	 * Common "global" stuff goes in this scope.
@@ -38,7 +38,7 @@
 		 */
 		var timer;
 
-		if (document.addEventListener)//the one and only concession to IE8, no functionality but no JS error either
+		if (document.addEventListener)  // the one and only concession to IE8, no functionality but no JS error either
 		{
 			document.addEventListener("DOMContentLoaded", initialize, false);
 		}
@@ -154,7 +154,7 @@
 				DUPLICATE: 16
 			};
 
-		if (document.addEventListener)//the one and only concession to IE8, no functionality but no JS error either
+		if (document.addEventListener)  // the one and only concession to IE8, no functionality but no JS error either
 		{
 			document.addEventListener("DOMContentLoaded", initialize, false);
 		}
@@ -327,7 +327,7 @@
 				if (col.type === type.NUMERIC)
 				{
 					result = col.sort(compareNumeric);
-					break;//go home, numeric is great
+					break;  // go home, numeric is great
 				}
 				else if (!bestType || col.type < bestType)
 				{
