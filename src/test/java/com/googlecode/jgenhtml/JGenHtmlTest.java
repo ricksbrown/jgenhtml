@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import junit.framework.TestCase;
 import org.apache.commons.io.FileUtils;
+import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -31,12 +32,12 @@ import org.w3c.dom.NodeList;
  */
 public class JGenHtmlTest extends TestCase
 {
-	//private final static Logger LOGGER = Logger.getLogger(JGenHtmlTest.class.getName());
-	//private String traceFileName = null;
-	private File jstdTestDir;//output results from processing a tracefile as produced by JSTD (i.e. nothing but line data)
-	private File cCodeTestDir;//output results from processing a tracefile with function and branch coverage as well as line data
-	private File baselinedTestDir;//output results from processing a tracefile with a baseline file
-	private File noSourceTestDir;//test with --no-source flag
+	// private final static Logger LOGGER = Logger.getLogger(JGenHtmlTest.class.getName());
+	// private String traceFileName = null;
+	private File jstdTestDir;  // output results from processing a tracefile as produced by JSTD (i.e. nothing but line data)
+	private File cCodeTestDir;  // output results from processing a tracefile with function and branch coverage as well as line data
+	private File baselinedTestDir;  // output results from processing a tracefile with a baseline file
+	private File noSourceTestDir;  // test with --no-source flag
 
 	@Override
 	protected void setUp() throws Exception
@@ -62,7 +63,7 @@ public class JGenHtmlTest extends TestCase
 		try
 		{
 			File outputDir = JGenHtmlTestUtils.getTestDir();
-			FileUtils.cleanDirectory(outputDir);//START WITH A CLEAN DIRECTORY!
+			FileUtils.cleanDirectory(outputDir);  // START WITH A CLEAN DIRECTORY!
 			jstdTestDir = new File(outputDir, "jstd");
 			cCodeTestDir = new File(outputDir, "code");
 			baselinedTestDir = new File(outputDir, "baselined");
@@ -73,7 +74,7 @@ public class JGenHtmlTest extends TestCase
 			JGenHtml.main(argv);
 			argv = new String[]{"-o", baselinedTestDir.getAbsolutePath(), "-b", JGenHtmlTestUtils.getBaselineFile(), JGenHtmlTestUtils.getTraceFilesWithBranchAndFuncData()[0]};
 			JGenHtml.main(argv);
-			argv = new String[]{"-o", noSourceTestDir.getAbsolutePath(), "--no-source",JGenHtmlTestUtils.getTraceFilesWithBranchAndFuncData()[0]};
+			argv = new String[]{"-o", noSourceTestDir.getAbsolutePath(), "--no-source", JGenHtmlTestUtils.getTraceFilesWithBranchAndFuncData()[0]};
 			JGenHtml.main(argv);
 		}
 		catch (IOException ex)
@@ -128,7 +129,7 @@ public class JGenHtmlTest extends TestCase
 	public void testSecondIndexPageStats()
 	{
 		System.out.println("testSecondIndexPageStats");
-		boolean result = checkTablesOnPage(jstdTestDir, "some/thing", "index.html", JGenHtmlTestUtils.SECOND_IDX_STATS_EXPECTED, "stats");
+		boolean result = checkTablesOnPage(jstdTestDir, "thing", "index.html", JGenHtmlTestUtils.SECOND_IDX_STATS_EXPECTED, "stats");
 		assertTrue(result);
 	}
 
@@ -138,7 +139,7 @@ public class JGenHtmlTest extends TestCase
 	public void testSecondIndexPageIndex()
 	{
 		System.out.println("testSecondIndexPageIndex");
-		boolean result = checkTablesOnPage(jstdTestDir, "some/thing", "index.html", JGenHtmlTestUtils.SECOND_IDX_INDEX_EXPECTED, "index");
+		boolean result = checkTablesOnPage(jstdTestDir, "thing", "index.html", JGenHtmlTestUtils.SECOND_IDX_INDEX_EXPECTED, "index");
 		assertTrue(result);
 	}
 
@@ -148,7 +149,7 @@ public class JGenHtmlTest extends TestCase
 	public void testThirdIndexPageStats()
 	{
 		System.out.println("testThirdIndexPageStats");
-		boolean result = checkTablesOnPage(jstdTestDir, "some/thing/else", "index.html", JGenHtmlTestUtils.THIRD_IDX_STATS_EXPECTED, "stats");
+		boolean result = checkTablesOnPage(jstdTestDir, "thing/else", "index.html", JGenHtmlTestUtils.THIRD_IDX_STATS_EXPECTED, "stats");
 		assertTrue(result);
 	}
 
@@ -158,7 +159,7 @@ public class JGenHtmlTest extends TestCase
 	public void testThirdIndexPageIndex()
 	{
 		System.out.println("testThirdIndexPageIndex");
-		boolean result = checkTablesOnPage(jstdTestDir, "some/thing/else", "index.html", JGenHtmlTestUtils.THIRD_IDX_INDEX_EXPECTED, "index");
+		boolean result = checkTablesOnPage(jstdTestDir, "thing/else", "index.html", JGenHtmlTestUtils.THIRD_IDX_INDEX_EXPECTED, "index");
 		assertTrue(result);
 	}
 
@@ -172,21 +173,21 @@ public class JGenHtmlTest extends TestCase
 	public void testFredJs()
 	{
 		System.out.println("testFredJs");
-		boolean result = checkTablesOnPage(jstdTestDir, "some/thing", "fred.js.gcov.html", JGenHtmlTestUtils.FRED_STATS_EXPECTED, "stats");
+		boolean result = checkTablesOnPage(jstdTestDir, "thing", "fred.js.gcov.html", JGenHtmlTestUtils.FRED_STATS_EXPECTED, "stats");
 		assertTrue(result);
 	}
 
 	public void testJimJs()
 	{
 		System.out.println("testJimJs");
-		boolean result = checkTablesOnPage(jstdTestDir, "some/thing", "jim.js.gcov.html", JGenHtmlTestUtils.JIM_STATS_EXPECTED, "stats");
+		boolean result = checkTablesOnPage(jstdTestDir, "thing", "jim.js.gcov.html", JGenHtmlTestUtils.JIM_STATS_EXPECTED, "stats");
 		assertTrue(result);
 	}
 
 	public void testBobJs()
 	{
 		System.out.println("testBobJs");
-		boolean result = checkTablesOnPage(jstdTestDir, "some/thing/else", "bob.js.gcov.html", JGenHtmlTestUtils.BOB_STATS_EXPECTED, "stats");
+		boolean result = checkTablesOnPage(jstdTestDir, "thing/else", "bob.js.gcov.html", JGenHtmlTestUtils.BOB_STATS_EXPECTED, "stats");
 		assertTrue(result);
 	}
 
@@ -200,84 +201,84 @@ public class JGenHtmlTest extends TestCase
 	public void testFredJsFunc()
 	{
 		System.out.println("testFredJsFunc");
-		boolean result = checkTablesOnPage(jstdTestDir, "some/thing", "fred.js.func.html", new String[][]{}, "functionCoverage");
+		boolean result = checkTablesOnPage(jstdTestDir, "thing", "fred.js.func.html", new String[][]{}, "functionCoverage");
 		assertFalse("function page should not exist if no functions found", result);
 	}
 
 	public void testJimJsFunc()
 	{
 		System.out.println("testJimJsFunc");
-		boolean result = checkTablesOnPage(jstdTestDir, "some/thing", "jim.js.func.html", new String[][]{}, "functionCoverage");
+		boolean result = checkTablesOnPage(jstdTestDir, "thing", "jim.js.func.html", new String[][]{}, "functionCoverage");
 		assertFalse("function page should not exist if no functions found", result);
 	}
 
 	public void testBobJsFunc()
 	{
 		System.out.println("testBobJsFunc");
-		boolean result = checkTablesOnPage(jstdTestDir, "some/thing/else", "bob.js.func.html", new String[][]{}, "functionCoverage");
+		boolean result = checkTablesOnPage(jstdTestDir, "thing/else", "bob.js.func.html", new String[][]{}, "functionCoverage");
 		assertFalse("function page should not exist if no functions found", result);
 	}
 
 	public void testCovC()
 	{
 		System.out.println("testCovC");
-		boolean result = checkTablesOnPage(cCodeTestDir, "test/gcov", "cov.c.gcov.html", JGenHtmlTestUtils.COV_STATS_EXPECTED, "stats");
+		boolean result = checkTablesOnPage(cCodeTestDir, "gcov", "cov.c.gcov.html", JGenHtmlTestUtils.COV_STATS_EXPECTED, "stats");
 		assertTrue(result);
 	}
 
 	public void testCov2C()
 	{
 		System.out.println("testCov2C");
-		boolean result = checkTablesOnPage(cCodeTestDir, "test/gcov", "cov2.c.gcov.html", JGenHtmlTestUtils.COV2_STATS_EXPECTED, "stats");
+		boolean result = checkTablesOnPage(cCodeTestDir, "gcov", "cov2.c.gcov.html", JGenHtmlTestUtils.COV2_STATS_EXPECTED, "stats");
 		assertTrue(result);
 	}
 
 	public void testCov3C()
 	{
 		System.out.println("testCov3C");
-		boolean result = checkTablesOnPage(cCodeTestDir, "test/gcov", "cov3.c.gcov.html", JGenHtmlTestUtils.COV3_STATS_EXPECTED, "stats");
+		boolean result = checkTablesOnPage(cCodeTestDir, "gcov", "cov3.c.gcov.html", JGenHtmlTestUtils.COV3_STATS_EXPECTED, "stats");
 		assertTrue(result);
 	}
 
 	public void testCovCFuncStats()
 	{
 		System.out.println("testCovCFuncStats");
-		boolean result = checkTablesOnPage(cCodeTestDir, "test/gcov", "cov.c.func.html", JGenHtmlTestUtils.COV_STATS_EXPECTED, "stats");
+		boolean result = checkTablesOnPage(cCodeTestDir, "gcov", "cov.c.func.html", JGenHtmlTestUtils.COV_STATS_EXPECTED, "stats");
 		assertTrue(result);
 	}
 
 	public void testCovCFunc()
 	{
 		System.out.println("testCovCFunc");
-		boolean result = checkTablesOnPage(cCodeTestDir, "test/gcov", "cov.c.func.html", JGenHtmlTestUtils.COV_FUNC_EXPECTED, "functionCoverage");
+		boolean result = checkTablesOnPage(cCodeTestDir, "gcov", "cov.c.func.html", JGenHtmlTestUtils.COV_FUNC_EXPECTED, "functionCoverage");
 		assertTrue(result);
 	}
 
 	public void testCovC2FuncStats()
 	{
 		System.out.println("testCovC2FuncStats");
-		boolean result = checkTablesOnPage(cCodeTestDir, "test/gcov", "cov2.c.func.html", JGenHtmlTestUtils.COV2_STATS_EXPECTED, "stats");
+		boolean result = checkTablesOnPage(cCodeTestDir, "gcov", "cov2.c.func.html", JGenHtmlTestUtils.COV2_STATS_EXPECTED, "stats");
 		assertTrue(result);
 	}
 
 	public void testCovC2Func()
 	{
 		System.out.println("testCovC2Func");
-		boolean result = checkTablesOnPage(cCodeTestDir, "test/gcov", "cov2.c.func.html", JGenHtmlTestUtils.COV2_FUNC_EXPECTED, "functionCoverage");
+		boolean result = checkTablesOnPage(cCodeTestDir, "gcov", "cov2.c.func.html", JGenHtmlTestUtils.COV2_FUNC_EXPECTED, "functionCoverage");
 		assertTrue(result);
 	}
 
 	public void testCovC3FuncStats()
 	{
 		System.out.println("testCovC3FuncStats");
-		boolean result = checkTablesOnPage(cCodeTestDir, "test/gcov", "cov3.c.func.html", JGenHtmlTestUtils.COV3_STATS_EXPECTED, "stats");
+		boolean result = checkTablesOnPage(cCodeTestDir, "gcov", "cov3.c.func.html", JGenHtmlTestUtils.COV3_STATS_EXPECTED, "stats");
 		assertTrue(result);
 	}
 
 	public void testCovC3Func()
 	{
 		System.out.println("testCovC3Func");
-		boolean result = checkTablesOnPage(cCodeTestDir, "test/gcov", "cov3.c.func.html", JGenHtmlTestUtils.COV3_FUNC_EXPECTED, "functionCoverage");
+		boolean result = checkTablesOnPage(cCodeTestDir, "gcov", "cov3.c.func.html", JGenHtmlTestUtils.COV3_FUNC_EXPECTED, "functionCoverage");
 		assertTrue(result);
 	}
 
@@ -307,7 +308,7 @@ public class JGenHtmlTest extends TestCase
 	public void testFirstCIndexPageStats()
 	{
 		System.out.println("testFirstCIndexPageStats");
-		boolean result = checkTablesOnPage(cCodeTestDir, "test/gcov", "index.html", JGenHtmlTestUtils.FIRST_C_IDX_STATS_EXPECTED, "stats");
+		boolean result = checkTablesOnPage(cCodeTestDir, "gcov", "index.html", JGenHtmlTestUtils.FIRST_C_IDX_STATS_EXPECTED, "stats");
 		assertTrue(result);
 	}
 
@@ -317,70 +318,70 @@ public class JGenHtmlTest extends TestCase
 	public void testFirstCIndexPageIndex()
 	{
 		System.out.println("testFirstCIndexPageIndex");
-		boolean result = checkTablesOnPage(cCodeTestDir, "test/gcov", "index.html", JGenHtmlTestUtils.FIRST_C_IDX_INDEX_EXPECTED, "index");
+		boolean result = checkTablesOnPage(cCodeTestDir, "gcov", "index.html", JGenHtmlTestUtils.FIRST_C_IDX_INDEX_EXPECTED, "index");
 		assertTrue(result);
 	}
 
 	public void testBaselinedCovC()
 	{
 		System.out.println("testBaselinedCovC");
-		boolean result = checkTablesOnPage(baselinedTestDir, "test/gcov", "cov.c.gcov.html", JGenHtmlTestUtils.BASELINED_COV_STATS_EXPECTED, "stats");
+		boolean result = checkTablesOnPage(baselinedTestDir, "gcov", "cov.c.gcov.html", JGenHtmlTestUtils.BASELINED_COV_STATS_EXPECTED, "stats");
 		assertTrue(result);
 	}
 
 	public void testBaselinedCov2C()
 	{
 		System.out.println("testBaselinedCov2C");
-		boolean result = checkTablesOnPage(baselinedTestDir, "test/gcov", "cov2.c.gcov.html", JGenHtmlTestUtils.BASELINED_COV2_STATS_EXPECTED, "stats");
+		boolean result = checkTablesOnPage(baselinedTestDir, "gcov", "cov2.c.gcov.html", JGenHtmlTestUtils.BASELINED_COV2_STATS_EXPECTED, "stats");
 		assertTrue(result);
 	}
 
 	public void testBaselinedCov3C()
 	{
 		System.out.println("testBaselinedCov3C");
-		boolean result = checkTablesOnPage(baselinedTestDir, "test/gcov", "cov3.c.gcov.html", JGenHtmlTestUtils.BASELINED_COV3_STATS_EXPECTED, "stats");
+		boolean result = checkTablesOnPage(baselinedTestDir, "gcov", "cov3.c.gcov.html", JGenHtmlTestUtils.BASELINED_COV3_STATS_EXPECTED, "stats");
 		assertTrue(result);
 	}
 
 	public void testBaselinedCovCFuncStats()
 	{
 		System.out.println("testBaselinedCovCFuncStats");
-		boolean result = checkTablesOnPage(baselinedTestDir, "test/gcov", "cov.c.func.html", JGenHtmlTestUtils.BASELINED_COV_STATS_EXPECTED, "stats");
+		boolean result = checkTablesOnPage(baselinedTestDir, "gcov", "cov.c.func.html", JGenHtmlTestUtils.BASELINED_COV_STATS_EXPECTED, "stats");
 		assertTrue(result);
 	}
 
 	public void testBaselinedCovCFunc()
 	{
 		System.out.println("testBaselinedCovCFunc");
-		boolean result = checkTablesOnPage(baselinedTestDir, "test/gcov", "cov.c.func.html", JGenHtmlTestUtils.BASELINED_COV_FUNC_EXPECTED, "functionCoverage");
+		boolean result = checkTablesOnPage(baselinedTestDir, "gcov", "cov.c.func.html", JGenHtmlTestUtils.BASELINED_COV_FUNC_EXPECTED, "functionCoverage");
 		assertTrue(result);
 	}
 
 	public void testBaselinedCovC2FuncStats()
 	{
 		System.out.println("testBaselinedCovC2FuncStats");
-		boolean result = checkTablesOnPage(baselinedTestDir, "test/gcov", "cov2.c.func.html", JGenHtmlTestUtils.BASELINED_COV2_STATS_EXPECTED, "stats");
+		boolean result = checkTablesOnPage(baselinedTestDir, "gcov", "cov2.c.func.html", JGenHtmlTestUtils.BASELINED_COV2_STATS_EXPECTED, "stats");
 		assertTrue(result);
 	}
 
 	public void testBaselinedCovC2Func()
 	{
 		System.out.println("testBaselinedCovC2Func");
-		boolean result = checkTablesOnPage(baselinedTestDir, "test/gcov", "cov2.c.func.html", JGenHtmlTestUtils.BASELINED_COV2_FUNC_EXPECTED, "functionCoverage");
+		boolean result = checkTablesOnPage(baselinedTestDir, "gcov", "cov2.c.func.html", JGenHtmlTestUtils.BASELINED_COV2_FUNC_EXPECTED, "functionCoverage");
 		assertTrue(result);
 	}
 
 	public void testBaselinedCovC3FuncStats()
 	{
 		System.out.println("testBaselinedCovC3FuncStats");
-		boolean result = checkTablesOnPage(baselinedTestDir, "test/gcov", "cov3.c.func.html", JGenHtmlTestUtils.BASELINED_COV3_STATS_EXPECTED, "stats");
+		boolean result = checkTablesOnPage(baselinedTestDir, "gcov", "cov3.c.func.html", JGenHtmlTestUtils.BASELINED_COV3_STATS_EXPECTED, "stats");
 		assertTrue(result);
 	}
 
 	public void testBaselinedCovC3Func()
 	{
 		System.out.println("testBaselinedCovC3Func");
-		boolean result = checkTablesOnPage(baselinedTestDir, "test/gcov", "cov3.c.func.html", JGenHtmlTestUtils.BASELINED_COV3_FUNC_EXPECTED, "functionCoverage");
+		boolean result = checkTablesOnPage(baselinedTestDir, "gcov", "cov3.c.func.html", JGenHtmlTestUtils.BASELINED_COV3_FUNC_EXPECTED, "functionCoverage");
 		assertTrue(result);
 	}
 
@@ -410,7 +411,7 @@ public class JGenHtmlTest extends TestCase
 	public void testBaselinedFirstCIndexPageStats()
 	{
 		System.out.println("testBaselinedFirstCIndexPageStats");
-		boolean result = checkTablesOnPage(baselinedTestDir, "test/gcov", "index.html", JGenHtmlTestUtils.BASELINED_FIRST_C_IDX_STATS_EXPECTED, "stats");
+		boolean result = checkTablesOnPage(baselinedTestDir, "gcov", "index.html", JGenHtmlTestUtils.BASELINED_FIRST_C_IDX_STATS_EXPECTED, "stats");
 		assertTrue(result);
 	}
 
@@ -420,7 +421,7 @@ public class JGenHtmlTest extends TestCase
 	public void testBaselinedFirstCIndexPageIndex()
 	{
 		System.out.println("testBaselinedFirstCIndexPageIndex");
-		boolean result = checkTablesOnPage(baselinedTestDir, "test/gcov", "index.html", JGenHtmlTestUtils.BASELINED_FIRST_C_IDX_INDEX_EXPECTED, "index");
+		boolean result = checkTablesOnPage(baselinedTestDir, "gcov", "index.html", JGenHtmlTestUtils.BASELINED_FIRST_C_IDX_INDEX_EXPECTED, "index");
 		assertTrue(result);
 	}
 
@@ -428,28 +429,28 @@ public class JGenHtmlTest extends TestCase
 	public void testNoSourceCovC()
 	{
 		System.out.println("testNoSourceCovC");
-		boolean result = checkTablesOnPage(noSourceTestDir, "test/gcov", "cov.c.gcov.html", JGenHtmlTestUtils.COV_STATS_EXPECTED, "stats");
+		boolean result = checkTablesOnPage(noSourceTestDir, "gcov", "cov.c.gcov.html", JGenHtmlTestUtils.COV_STATS_EXPECTED, "stats");
 		assertFalse("should not create source with no-source flag set", result);
 	}
 
 	public void testNoSourceCov2C()
 	{
 		System.out.println("testNoSourceCov2C");
-		boolean result = checkTablesOnPage(noSourceTestDir, "test/gcov", "cov2.c.gcov.html", JGenHtmlTestUtils.COV2_STATS_EXPECTED, "stats");
+		boolean result = checkTablesOnPage(noSourceTestDir, "gcov", "cov2.c.gcov.html", JGenHtmlTestUtils.COV2_STATS_EXPECTED, "stats");
 		assertFalse("should not create source with no-source flag set", result);
 	}
 
 	public void testNoSourceCov3C()
 	{
 		System.out.println("testNoSourceCov3C");
-		boolean result = checkTablesOnPage(noSourceTestDir, "test/gcov", "cov3.c.gcov.html", new String[][]{}, "stats");
+		boolean result = checkTablesOnPage(noSourceTestDir, "gcov", "cov3.c.gcov.html", new String[][]{}, "stats");
 		assertFalse("should not create source with no-source flag set", result);
 	}
 
 	public void testNoSourceCovCFunc()
 	{
 		System.out.println("testNoSourceCovCFunc");
-		boolean result = checkTablesOnPage(noSourceTestDir, "test/gcov", "cov.c.func.html", new String[][]{}, "functionCoverage");
+		boolean result = checkTablesOnPage(noSourceTestDir, "gcov", "cov.c.func.html", new String[][]{}, "functionCoverage");
 		assertFalse("should not create function page with no-source flag set", result);
 	}
 
@@ -457,14 +458,14 @@ public class JGenHtmlTest extends TestCase
 	public void testNoSourceCovC2Func()
 	{
 		System.out.println("testNoSourceCovC2Func");
-		boolean result = checkTablesOnPage(noSourceTestDir, "test/gcov", "cov2.c.func.html", new String[][]{}, "functionCoverage");
+		boolean result = checkTablesOnPage(noSourceTestDir, "gcov", "cov2.c.func.html", new String[][]{}, "functionCoverage");
 		assertFalse("should not create function page with no-source flag set", result);
 	}
 
 	public void testNoSourceCovC3Func()
 	{
 		System.out.println("testNoSourceCovC3Func");
-		boolean result = checkTablesOnPage(noSourceTestDir, "test/gcov", "cov3.c.func.html", new String[][]{}, "functionCoverage");
+		boolean result = checkTablesOnPage(noSourceTestDir, "gcov", "cov3.c.func.html", new String[][]{}, "functionCoverage");
 		assertFalse("should not create function page with no-source flag set", result);
 	}
 
@@ -494,7 +495,7 @@ public class JGenHtmlTest extends TestCase
 	public void testNoSourceFirstCIndexPageStats()
 	{
 		System.out.println("testNoSourceFirstCIndexPageStats");
-		boolean result = checkTablesOnPage(noSourceTestDir, "test/gcov", "index.html", JGenHtmlTestUtils.FIRST_C_IDX_STATS_EXPECTED, "stats");
+		boolean result = checkTablesOnPage(noSourceTestDir, "gcov", "index.html", JGenHtmlTestUtils.FIRST_C_IDX_STATS_EXPECTED, "stats");
 		assertTrue(result);
 	}
 
@@ -504,7 +505,7 @@ public class JGenHtmlTest extends TestCase
 	public void testNoSourceFirstCIndexPageIndex()
 	{
 		System.out.println("testNoSourceFirstCIndexPageIndex");
-		boolean result = checkTablesOnPage(noSourceTestDir, "test/gcov", "index.html", JGenHtmlTestUtils.FIRST_C_IDX_INDEX_EXPECTED, "index");
+		boolean result = checkTablesOnPage(noSourceTestDir, "gcov", "index.html", JGenHtmlTestUtils.FIRST_C_IDX_INDEX_EXPECTED, "index");
 		assertTrue(result);
 	}
 
@@ -523,7 +524,7 @@ public class JGenHtmlTest extends TestCase
 		File page = new File(htmlDir, pageName);
 		if((result = page.exists()))
 		{
-			Document document = (Document) JGenHtmlTestUtils.parse(page.getAbsolutePath());//not really caring about performance in my tests
+			Document document = (Document) JGenHtmlTestUtils.parse(page.getAbsolutePath());  // not really caring about performance in my tests
 			checkTable(document, expectedResults, tableClass);
 		}
 		return result;
@@ -540,17 +541,19 @@ public class JGenHtmlTest extends TestCase
 		if(tables.size() == 1)
 		{
 			Element table = tables.get(0);
-			Element tbody = (Element) table.getElementsByTagName("tbody").item(0);//all jgenhtml tables have explicit tbody elements
-			NodeList rows = tbody.getElementsByTagName("tr");
-			assertTrue("Not testing anything!", rows.getLength() > 0);
-			for(int i=0; i< rows.getLength(); i++)
+			Element tbody = (Element) table.getElementsByTagName("tbody").item(0);  // all jgenhtml tables have explicit tbody elements
+			List<Element> rows = getRows(tbody);
+			assertFalse("Not testing anything!", rows.isEmpty());
+			for(int i = 0; i < rows.size(); i++)
 			{
 				String[] expected = expectedResults[i];
-				NodeList cells = ((Element)rows.item(i)).getElementsByTagName("td");
+				NodeList cells = rows.get(i).getElementsByTagName("td");
 				assertEquals("Unexpected cell count", expected.length, cells.getLength());
-				for(int j=0; j<cells.getLength(); j++)
+				for(int j = 0; j < cells.getLength(); j++)
 				{
-					assertEquals(expected[j], cells.item(j).getTextContent().trim());
+					String nextExpected = expected[j];
+					String nexActual = cells.item(j).getTextContent().trim();
+					assertEquals(nextExpected, nexActual);
 				}
 			}
 		}
@@ -558,6 +561,20 @@ public class JGenHtmlTest extends TestCase
 		{
 			fail("Expected to find one table but got " + tables.size());
 		}
+	}
+
+	private List<Element> getRows(final Element tbody) {
+		List<Element> result = new ArrayList<>();
+		NodeList rows = tbody.getElementsByTagName("tr");
+		for(int i = 0; i < rows.getLength(); i++)
+		{
+			Element row = (Element) rows.item(i);
+			String className = row.hasAttribute("class") ? row.getAttribute("class") : row.getAttribute("className");
+			if (!"bound".equals(className)) {
+				result.add(row);
+			}
+		}
+		return result;
 	}
 
 	/**

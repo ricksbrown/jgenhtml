@@ -30,7 +30,7 @@ import org.w3c.dom.Element;
 public abstract class SourceCode
 {
 	public static final int NON_EXECUTABLE = -1;
-	private Map<String, Integer> hits = new HashMap<String, Integer>();
+	private final Map<String, Integer> hits = new HashMap<>();
 	private boolean executable;
 
 	/**
@@ -51,8 +51,8 @@ public abstract class SourceCode
 		Collection<String> result = hits.keySet();
 		if(hitOnly)
 		{
-			Set<String> filtered = new HashSet<String>(result.size());
-			for(String testName : hits.keySet())
+			Set<String> filtered = new HashSet<>(result.size());
+			for (String testName : hits.keySet())
 			{
 				if(hits.get(testName) > 0)
 				{

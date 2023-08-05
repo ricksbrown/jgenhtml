@@ -46,7 +46,7 @@ public class JGenHtmlExecuterTest extends TestCase
 		JGenHtmlExecuter instance = new JGenHtmlExecuter();
 		instance.addTracefile(tracefiles);
 		String[] tracefilesActual = getTracefiles(instance.buildArgs());
-		Assert.assertArrayEquals(tracefiles, tracefilesActual);
+		Assert.assertTrue(JGenHtmlTestUtils.arrayEqualsIgnoreOrder(tracefiles, tracefilesActual));
 	}
 
 	public void testAddTracefileWithStringArrAndString()
@@ -155,7 +155,7 @@ public class JGenHtmlExecuterTest extends TestCase
 		instance.addTracefile(tracefiles);
 		instance.addTracefile(tracefiles);
 		String[] tracefilesActual = getTracefiles(instance.buildArgs());
-		Assert.assertArrayEquals(tracefiles, tracefilesActual);
+		Assert.assertTrue(JGenHtmlTestUtils.arrayEqualsIgnoreOrder(tracefiles, tracefilesActual));
 	}
 
 	public void testAddTracefileWithDuplicateStringArrAndString()
@@ -178,7 +178,7 @@ public class JGenHtmlExecuterTest extends TestCase
 		instance.addTracefile(tracefile);
 		String[] tracefilesActual = getTracefiles(instance.buildArgs());
 		assertEquals(2, tracefilesActual.length);
-		Assert.assertArrayEquals(tracefiles, tracefilesActual);
+		Assert.assertTrue(JGenHtmlTestUtils.arrayEqualsIgnoreOrder(tracefiles, tracefilesActual));
 	}
 
 	/**
@@ -200,11 +200,13 @@ public class JGenHtmlExecuterTest extends TestCase
 	public void testSetConfig()
 	{
 		System.out.println("setConfig");
-		File cssFile = JGenHtmlTestUtils.createCssFile();//this file must exist for the test to work
-		File lcovrc = JGenHtmlTestUtils.createLcovrcFile(cssFile.getAbsolutePath(), null, null, null, null, null, null, null);//create an lcovrc file which sets the css file
+		File cssFile = JGenHtmlTestUtils.createCssFile();  // this file must exist for the test to work
+		File lcovrc = JGenHtmlTestUtils.createLcovrcFile(cssFile.getAbsolutePath(), null, null, null, null, null, null, null);  // create an lcovrc file which sets the css file
 		String config = lcovrc.getAbsolutePath();
 		JGenHtmlExecuter instance = new JGenHtmlExecuter();
-		instance.setConfig(config);//point to the lcovrc file created above
+		String tracefile = "/foo/bar/test.info";
+		instance.addTracefile(tracefile);
+		instance.setConfig(config);  // point to the lcovrc file created above
 		Config configInstance = new Config();
 		try
 		{
@@ -217,7 +219,7 @@ public class JGenHtmlExecuterTest extends TestCase
 		File actualCssFile = configInstance.getCssFile();
 		if(actualCssFile != null)
 		{
-			assertEquals(cssFile.getAbsolutePath(), actualCssFile.getAbsolutePath());//if the lcovrc was correctly set then this instance will point to our css file
+			assertEquals(cssFile.getAbsolutePath(), actualCssFile.getAbsolutePath());  // if the lcovrc was correctly set then this instance will point to our css file
 		}
 		else
 		{

@@ -23,7 +23,6 @@ import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -36,9 +35,9 @@ import org.w3c.dom.Element;
 public class DescriptionsPage
 {
 	private static final Logger LOGGER = Logger.getLogger(DescriptionsPage.class.getName());
-	private Element descriptions;
-	private Document doc;
-	private Set<String> runTests;
+	private final Element descriptions;
+	private final Document doc;
+	private final Set<String> runTests;
 	private boolean ignoreDescriptions;
 
 	public DescriptionsPage(final String testName, Set<String> runTests) throws ParserConfigurationException
@@ -63,7 +62,7 @@ public class DescriptionsPage
 
 	/**
 	 * Add more description information.
-	 * @param line a line from the description file.
+	 * @param lineToAdd a line from the description file.
 	 */
 	public void addLine(final String lineToAdd)
 	{
@@ -101,10 +100,9 @@ public class DescriptionsPage
 	 * Writes this instance to the filesystem as a report page (xml/html).
 	 * @param rootDir The root output directory.
 	 * @param asXml If true, will write XML files (for client side transform) instead of HTML.
-	 * @throws TransformerConfigurationException
 	 * @throws TransformerException
 	 */
-	public void writeToFileSystem(final File rootDir, final boolean asXml) throws TransformerConfigurationException, TransformerException, IOException
+	public void writeToFileSystem(final File rootDir, final boolean asXml) throws TransformerException, IOException
 	{
 		String tagetFileName = "descriptions";
 		Config config = CoverageReport.getConfig();

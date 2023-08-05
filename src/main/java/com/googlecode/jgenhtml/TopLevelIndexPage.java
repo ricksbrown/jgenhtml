@@ -26,7 +26,6 @@ import javax.xml.parsers.ParserConfigurationException;
  */
 public class TopLevelIndexPage extends CoverageIndexPage
 {
-	//private static final Logger LOGGER = Logger.getLogger(TopLevelIndexPage.class.getName());
 
 	/**
 	 * Create a new instance of this class.

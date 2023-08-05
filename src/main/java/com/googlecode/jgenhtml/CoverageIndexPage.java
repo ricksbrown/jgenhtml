@@ -25,14 +25,14 @@ import org.w3c.dom.Element;
  */
 public abstract class CoverageIndexPage extends CoveragePage
 {
-	private Element sources;
+	private final Element sources;
 
 	/**
 	 * Create a new instance.
 	 * @param testName The name to display as the test name.
 	 * @throws ParserConfigurationException
 	 */
-	public CoverageIndexPage(final String testName) throws ParserConfigurationException
+	protected CoverageIndexPage(final String testName) throws ParserConfigurationException
 	{
 		super(testName, "index");
 		Document doc = this.getDoc();

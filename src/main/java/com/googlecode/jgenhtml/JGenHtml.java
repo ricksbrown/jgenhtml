@@ -33,7 +33,7 @@ public class JGenHtml
 	static{
 		JGenHtmlUtils.setLogFormatter(LOGGER);
 	}
-	public static final String VERSION = "1.5";//todo find a sensible way to get this from the pom
+	public static final String VERSION = "1.6";  // todo find a sensible way to get this from the pom
 
 	/**
 	 * Run jgenhtml.
@@ -74,11 +74,7 @@ public class JGenHtml
 				}
 			}
 		}
-		catch (IOException ex)
-		{
-			LOGGER.log(Level.SEVERE, null, ex);
-		}
-		catch (ParserConfigurationException ex)
+		catch (IOException | ParserConfigurationException ex)
 		{
 			LOGGER.log(Level.SEVERE, null, ex);
 		}

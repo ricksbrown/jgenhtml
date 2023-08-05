@@ -26,7 +26,7 @@ DA:16,1
 LF:7
 LH:6
 end_of_record
-TN:MOO
+TN:MOO2
 SF:/home/rick/projects/test/gcov/cov2.c
 FN:4,main
 FNDA:1,main
@@ -77,7 +77,7 @@ LF:7
 LH:6
 end_of_record
 TN:MOO4
-SF:/home/rick/projects/test/gcov/cov.c
+SF:/home/rick/projects/test/gcov/cov4.c
 FN:4,main
 FN:9,mainTwo
 FN:14,mainThree
@@ -105,7 +105,7 @@ LF:7
 LH:4
 end_of_record
 TN:MOO5
-SF:/home/fred/projects/test/gcov/cov.c
+SF:/home/fred/projects/test/gcov/cov5.c
 FN:4,main
 FN:9,mainTwo
 FN:14,mainThree

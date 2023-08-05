@@ -17,6 +17,8 @@ package com.googlecode.jgenhtml;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -25,7 +27,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
@@ -38,17 +39,18 @@ import org.apache.commons.io.LineIterator;
 public final class CoverageReport
 {
 	private static final Logger LOGGER = Logger.getLogger(CoverageReport.class.getName());
-	private static Config config = null;
+	private static Config config;
 	public static final String DEFAULT_TEST_NAME = "<unnamed>";
 	private String testTitle;
-	private String[] traceFiles;
-	private ParsedFiles parsedFiles;
+	private final String[] traceFiles;
+	private final ParsedFiles parsedFiles;
 	private DescriptionsPage descriptionsPage;
 	private Collection<TestCaseIndexPage> indexPages;
 	private Set<String> runTestNames;
 
-	static{
+	static {
 		JGenHtmlUtils.setLogFormatter(LOGGER);
+		config = new Config();
 	}
 
 	/**
@@ -59,11 +61,6 @@ public final class CoverageReport
 	 */
 	public CoverageReport(final String[] traceFiles) throws IOException, ParserConfigurationException
 	{
-		if(config == null)
-		{
-			config = new Config();
-		}
-
 		this.traceFiles = traceFiles;
 		this.descriptionsPage = null;
 		this.indexPages = null;
@@ -81,38 +78,38 @@ public final class CoverageReport
 	 * Basically a registry to manage parsed source file data.
 	 * Should be a singleton.
 	 */
-	private class ParsedFiles
+	private static class ParsedFiles
 	{
-		private Map<String, TestCaseSourceFile> parsedFiles;
+		private final Map<String, TestCaseSourceFile> parsed;
 
 		public ParsedFiles()
 		{
-			this.parsedFiles = new HashMap<String, TestCaseSourceFile>();
+			this.parsed = new HashMap<>();
 		}
 
 		public TestCaseSourceFile get(final String filePath)
 		{
 			TestCaseSourceFile result = null;
-			if(parsedFiles.containsKey(filePath))
+			if(parsed.containsKey(filePath))
 			{
-				result = parsedFiles.get(filePath);
+				result = parsed.get(filePath);
 			}
 			return result;
 		}
 
 		public TestCaseSourceFile put(final String filePath, final TestCaseSourceFile parsedFile)
 		{
-			return parsedFiles.put(filePath, parsedFile);
+			return parsed.put(filePath, parsedFile);
 		}
 
 		public Collection<TestCaseSourceFile> getAll()
 		{
-			return this.parsedFiles.values();
+			return this.parsed.values();
 		}
 
 		public int getCount()
 		{
-			return this.parsedFiles.size();
+			return this.parsed.size();
 		}
 
 	}
@@ -132,14 +129,14 @@ public final class CoverageReport
 	 */
 	public void processTraceFiles() throws IOException, ParserConfigurationException
 	{
-		for(int i=0, len=traceFiles.length; i<len; i++)
+		for (String file : traceFiles)
 		{
-			File traceFile = new File(traceFiles[i]);
-			if(traceFile.exists())
+			File traceFile = new File(file);
+			if (traceFile.exists())
 			{
-				if(testTitle == null && (config == null || (testTitle = config.getTitle()) == null))
+				if (testTitle == null && (config == null || (testTitle = config.getTitle()) == null))
 				{
-					testTitle = traceFiles.length == 1? traceFile.getName() : "unnamed";
+					testTitle = traceFiles.length == 1 ? traceFile.getName() : "unnamed";
 				}
 				LOGGER.log(Level.INFO, "Reading data file: {0}", traceFile.getName());
 				parseDatFile(traceFile, false, false);
@@ -151,11 +148,11 @@ public final class CoverageReport
 		}
 	}
 
-	private void checkProcessBaselineFile(final File baseFile) throws IOException, ParserConfigurationException
+	private void checkProcessBaselineFile(final File baselineFile) throws IOException, ParserConfigurationException
 	{
-		if(baseFile != null)
+		if(baselineFile != null)
 		{
-			parseDatFile(baseFile, false, true);
+			parseDatFile(baselineFile, false, true);
 		}
 	}
 
@@ -172,11 +169,11 @@ public final class CoverageReport
 	 * Parses a gcov tracefile.
 	 * @param traceFile A gcov tracefile.
 	 * @param isDescFile true if this is a descriptions (.desc) file.
-	 * @param isBaseFile true if this is a baseline file.
+	 * @param isBaselineFile true if this is a baseline file.
 	 */
-	private void parseDatFile(final File traceFile, final boolean isDescFile, final boolean isBaseFile) throws IOException, ParserConfigurationException
+	private void parseDatFile(final File traceFile, final boolean isDescFile, final boolean isBaselineFile) throws IOException, ParserConfigurationException
 	{
-		//I used the info from here: http://manpages.ubuntu.com/manpages/precise/man1/geninfo.1.html
+		// I used the info from here: http://manpages.ubuntu.com/manpages/precise/man1/geninfo.1.html
 		File fileToProcess;
 		if(traceFile.getName().endsWith(".gz"))
 		{
@@ -198,18 +195,10 @@ public final class CoverageReport
 				int tokenIdx = line.indexOf("SF:");
 				if(tokenIdx >= 0 || (tokenIdx = line.indexOf("KF:")) >= 0)
 				{
-					String fullPath = line.substring(line.indexOf(tokenIdx) + 4);
-					File sourceFile = new File(fullPath);
-					fullPath = sourceFile.getCanonicalPath();
-					testCaseSourceFile = parsedFiles.get(fullPath);
-					if(!isBaseFile && testCaseSourceFile == null)
-					{
-						testCaseSourceFile = new TestCaseSourceFile(testTitle, sourceFile.getName());
-						testCaseSourceFile.setSourceFile(sourceFile);
-						parsedFiles.put(fullPath, testCaseSourceFile);
-					}
+					File sourceFile = JGenHtmlUtils.processFilePath(line.substring(line.indexOf(tokenIdx) + 4));
+					testCaseSourceFile = getTestCaseSourceFile(sourceFile, !isBaselineFile);
 				}
-				else if(line.indexOf("end_of_record") >= 0)
+				else if(line.contains("end_of_record"))
 				{
 					if(testCaseSourceFile != null)
 					{
@@ -223,7 +212,7 @@ public final class CoverageReport
 				}
 				else if(testCaseSourceFile != null)
 				{
-					testCaseSourceFile.processLine(testCaseName, line, isBaseFile);
+					testCaseSourceFile.processLine(testCaseName, line, isBaselineFile);
 				}
 				else
 				{
@@ -231,15 +220,16 @@ public final class CoverageReport
 					{
 						descriptionsPage.addLine(line);
 					}
-					else if(line.startsWith("TN:"))
-					{
+					else if(line.startsWith("TN:")) {
 						String[] data = JGenHtmlUtils.extractLineValues(line);
-						testCaseName = data[0].trim();
-						if(testCaseName.length() > 0)
+						if (data != null) {
+							testCaseName = data[0].trim();
+						}
+						if(!testCaseName.isEmpty())
 						{
 							if(runTestNames == null)
 							{
-								runTestNames = new HashSet<String>();
+								runTestNames = new HashSet<>();
 							}
 							runTestNames.add(testCaseName);
 						}
@@ -257,9 +247,19 @@ public final class CoverageReport
 		}
 	}
 
+	private TestCaseSourceFile getTestCaseSourceFile(final File sourceFile, boolean create) throws ParserConfigurationException, IOException {
+		TestCaseSourceFile testCaseSourceFile = parsedFiles.get(sourceFile.getPath());
+		if (create && testCaseSourceFile == null)
+		{
+			testCaseSourceFile = new TestCaseSourceFile(testTitle, sourceFile.getName());
+			testCaseSourceFile.setSourceFile(sourceFile);
+			parsedFiles.put(sourceFile.getPath(), testCaseSourceFile);
+		}
+		return testCaseSourceFile;
+	}
+
 	/**
 	 * Write the coverage reports to the file system.
-	 * @param testCaseSourceFiles  The source files we are processing.
 	 */
 	public void generateReports() throws IOException, ParserConfigurationException
 	{
@@ -273,34 +273,36 @@ public final class CoverageReport
 			generateDescriptionPage();
 			TopLevelIndexPage index = new TopLevelIndexPage(testTitle, indexPages);
 			LOGGER.log(Level.INFO, "Writing directory view page.");
-			try
-			{
-
-				LOGGER.log(Level.INFO, "Overall coverage rate:");
-				logSummary("lines", index.getLineRate(), index.getLineHit(), index.getLineCount());
-				logSummary("functions", index.getFunctionRate(), index.getFuncHit(), index.getFuncCount());
-				logSummary("branches", index.getBranchRate(), index.getBranchHit(), index.getBranchCount());
-			}
-			catch(Throwable t)
-			{
-				//don't die if there is an exception in logging
-				LOGGER.log(Level.WARNING, t.getLocalizedMessage());
-			}
+			loggerSummary(index);
 			index.writeToFileSystem();
-		}
-		catch (TransformerConfigurationException ex)
-		{
-			LOGGER.log(Level.SEVERE, ex.getLocalizedMessage());
 		}
 		catch (TransformerException ex)
 		{
 			LOGGER.log(Level.SEVERE, ex.getLocalizedMessage());
 		}
+
+	}
+
+	private void loggerSummary(TopLevelIndexPage index)
+	{
+		try
+		{
+
+			LOGGER.log(Level.INFO, "Overall coverage rate:");
+			logSummary("lines", index.getLineRate(), index.getLineHit(), index.getLineCount());
+			logSummary("functions", index.getFunctionRate(), index.getFuncHit(), index.getFuncCount());
+			logSummary("branches", index.getBranchRate(), index.getBranchHit(), index.getBranchCount());
+		}
+		catch(Throwable t)
+		{
+			// don't die if there is an exception in logging
+			LOGGER.log(Level.WARNING, t.getLocalizedMessage());
+		}
 	}
 
 	/**
 	 * Log a summary of the coverage information.
-	 * @param prefix The type of coverage: "lines", "functions" or "branches".
+	 * @param type The type of coverage: "lines", "functions" or "branches".
 	 * @param rate The coverage rate.
 	 * @param hit The execution count.
 	 * @param count The executable count.
@@ -311,7 +313,9 @@ public final class CoverageReport
 		prefix = prefix.replace(" ", ".");
 		if(count > 0)
 		{
-			String[] info = new String[]{prefix, String.valueOf(rate * 100), String.valueOf(hit), String.valueOf(count), type};
+			NumberFormat formatter = new DecimalFormat("0.0");
+			String rateFormatted = formatter.format(rate * 100);
+			String[] info = new String[]{prefix, rateFormatted, String.valueOf(hit), String.valueOf(count), type};
 			LOGGER.log(Level.INFO, "\t{0}: {1}% ({2} of {3} {4})", info);
 		}
 		else
@@ -372,7 +376,7 @@ public final class CoverageReport
 		}
 	}
 
-	private void generateDescriptionPage() throws TransformerConfigurationException, IOException, TransformerException
+	private void generateDescriptionPage() throws IOException, TransformerException
 	{
 		if(this.descriptionsPage != null)
 		{
@@ -387,11 +391,9 @@ public final class CoverageReport
 
 	/**
 	 * Generates index pages in output directory.
-	 * @param indexPages The index pages to generate.
-	 * @throws TransformerConfigurationException
 	 * @throws TransformerException
 	 */
-	private void generateIndexFiles() throws TransformerConfigurationException, TransformerException, IOException
+	private void generateIndexFiles() throws TransformerException, IOException
 	{
 		for(TestCaseIndexPage index : indexPages)
 		{
@@ -401,19 +403,17 @@ public final class CoverageReport
 
 	/**
 	 * Generate line coverage report pages in the output directory.
-	 * @param testCaseSourceFiles The test case source files to generate.
 	 * @return Index pages required to reference the coverage reports.
-	 * @throws TransformerConfigurationException
 	 * @throws TransformerException
 	 */
-	private void generateCoverageReports() throws TransformerConfigurationException, TransformerException, IOException, ParserConfigurationException
+	private void generateCoverageReports() throws TransformerException, IOException, ParserConfigurationException
 	{
-		Map<String, TestCaseIndexPage> indeces = new HashMap<String, TestCaseIndexPage>();
+		Map<String, TestCaseIndexPage> indices = new HashMap<>();
 		for(TestCaseSourceFile testCaseSourceFile : parsedFiles.getAll())
 		{
 			LOGGER.log(Level.INFO, "Writing report for {0}", testCaseSourceFile.getPageName());
 			String path = testCaseSourceFile.getPath();
-			if(!indeces.containsKey(path))
+			if(!indices.containsKey(path))
 			{
 				String testName = testCaseSourceFile.getTestName();
 				TestCaseIndexPage indexPage = new TestCaseIndexPage(testName, path);
@@ -422,18 +422,17 @@ public final class CoverageReport
 				{
 					indexPage.setPrefix(prefix);
 				}
-				indeces.put(path, indexPage);
+				indices.put(path, indexPage);
 			}
-			TestCaseIndexPage indexPage = indeces.get(path);
+			TestCaseIndexPage indexPage = indices.get(path);
 			indexPage.addSourceFile(testCaseSourceFile);
 			testCaseSourceFile.writeToFileSystem();
 		}
-		indexPages = indeces.values();
+		indexPages = indices.values();
 	}
 
 	/**
 	 * For the list of source files, iterate over each of them and remove the prefix if appropriate.
-	 * @param testCaseSourceFiles The list of source files.
 	 */
 	public void removePrefix()
 	{
@@ -476,12 +475,12 @@ public final class CoverageReport
 			}
 			else
 			{
-				LOGGER.log(Level.INFO, "No common filename prefix found!", result);
+				LOGGER.log(Level.INFO, "No common filename prefix found!");
 			}
 		}
 		else
 		{
-			LOGGER.log(Level.INFO, "Using user-specified filename prefix \"{0}\'", result);
+			LOGGER.log(Level.INFO, "Using user-specified filename prefix \"{0}\"", result);
 		}
 		return result;
 	}

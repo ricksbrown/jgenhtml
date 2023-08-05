@@ -303,7 +303,7 @@ public final class Config
 			}
 			else if(cmd.hasOption(CmdLineArg.SORT.toString()))
 			{
-				this.setNoSort(false);//wow, this is totally pointless
+				this.setNoSort(false);  // wow, this is totally pointless
 			}
 			if(cmd.hasOption(CmdLineArg.LEGEND.toString()))
 			{
@@ -757,7 +757,7 @@ public final class Config
 	 */
 	public boolean isLegend()
 	{
-		return legend;
+		return this.legend;
 	}
 
 	/**
@@ -771,11 +771,10 @@ public final class Config
 
 	/**
 	 * Get the override CSS file.
-	 * @param cssPath The override CSS file if it has been set, otherwise null.
 	 */
 	public File getCssFile()
 	{
-		return cssFile;
+		return this.cssFile;
 	}
 
 	/**

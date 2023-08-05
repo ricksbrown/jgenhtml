@@ -37,9 +37,9 @@ public abstract class CoveragePage
 	private int lineCount;
 	private int lineHit;
 	private String path;
-	private String testName;
+	private final String testName;
 	private String pageName;
-	private Document doc;
+	private final Document doc;
 	private String prefix;
 	private int funcCount;
 	private int funcHit;
@@ -142,13 +142,9 @@ public abstract class CoveragePage
 	public void setPath(final String path)
 	{
 		String newPath = path;
-		newPath = newPath.replace(File.separator, "/");//for web stuff we want fwd slashes
+		newPath = newPath.replace(File.separator, "/");  // for web stuff we want fwd slashes
 		newPath = newPath.replaceAll("/+", "/");
-		int idx = newPath.indexOf('/');
-		if(idx > 0)//basically strip drive letters
-		{
-			newPath = newPath.substring(idx);
-		}
+		newPath = newPath.replaceAll("^[A-Za-z]:", "");  // basically strip drive letters
 
 		this.path = newPath;
 	}
@@ -217,7 +213,7 @@ public abstract class CoveragePage
 	void setPageName(final String pageName)
 	{
 		String newPageName = (pageName != null)? pageName.trim() : null;
-		if(newPageName != null && newPageName.length() > 0)
+		if(newPageName != null && !newPageName.isEmpty())
 		{
 			this.pageName = pageName;
 		}
@@ -240,11 +236,9 @@ public abstract class CoveragePage
 
 	/**
 	 * Writes this coverage page to the file system as XML/HTML.
-	 * @param rootDir The output directory.
-	 * @throws TransformerConfigurationException
 	 * @throws TransformerException
 	 */
-	public void writeToFileSystem() throws TransformerConfigurationException, TransformerException, IOException
+	public void writeToFileSystem() throws TransformerException, IOException
 	{
 		updateCoverageAttributes();
 		Config config = CoverageReport.getConfig();
