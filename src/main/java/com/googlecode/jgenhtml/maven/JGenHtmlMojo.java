@@ -15,37 +15,41 @@
  */
 package com.googlecode.jgenhtml.maven;
 
-import com.googlecode.jgenhtml.plugin.JGenHtmlExecuter;
+import com.googlecode.jgenhtml.plugin.JGenHtmlExecutor;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 
 /**
  * This class is a Maven plugin that runs jgenhtml against specified tracefiles.
- * @goal test
- * @phase test
  */
+@Mojo(name = "genthml", defaultPhase = LifecyclePhase.PACKAGE)
 public class JGenHtmlMojo extends AbstractMojo
 {
 	/**
 	 * An array of paths to the tracefiles to process.
-	 * @parameter property="jgenhtml.tracefiles"
 	 */
+	@Parameter(property = "jgenhtml.tracefiles")
 	private String[] tracefiles = null;
 
 	/**
-	 * A
-	 * @parameter property="jgenhtml.in"
+	 * A single tracefile to process.
 	 */
+	@Parameter(property = "jgenhtml.in")
 	private String in;
 
 	/**
-	 * @parameter property="jgenhtml.outdir"
+	 * The output directory.
 	 */
+	@Parameter(property = "jgenhtml.outdir")
 	private String outdir = null;
 
 	/**
-	 * @parameter property="jgenhtml.config"
+	 * Path to a config file.
 	 */
+	@Parameter(property = "jgenhtml.config")
 	private String config = null;
 
 	public void setTracefiles(String[] tracefiles)
@@ -58,12 +62,12 @@ public class JGenHtmlMojo extends AbstractMojo
 	{
 		try
 		{
-			JGenHtmlExecuter executer = new JGenHtmlExecuter();
-			executer.addTracefile(tracefiles);
-			executer.addTracefile(in);
-			executer.setOutdir(outdir);
-			executer.setConfig(config);
-			executer.execute();
+			JGenHtmlExecutor executor = new JGenHtmlExecutor();
+			executor.addTracefile(tracefiles);
+			executor.addTracefile(in);
+			executor.setOutdir(outdir);
+			executor.setConfig(config);
+			executor.execute();
 		}
 		catch(IllegalStateException ex)
 		{

@@ -43,7 +43,7 @@ public class JGenHtmlExecuterTest extends TestCase
 	{
 		System.out.println("testAddTracefileWithStringArr");
 		String[] tracefiles = {"/foo/bar/test.info", "/bar/foo/test.info"};
-		JGenHtmlExecuter instance = new JGenHtmlExecuter();
+		JGenHtmlExecutor instance = new JGenHtmlExecutor();
 		instance.addTracefile(tracefiles);
 		String[] tracefilesActual = getTracefiles(instance.buildArgs());
 		Assert.assertTrue(JGenHtmlTestUtils.arrayEqualsIgnoreOrder(tracefiles, tracefilesActual));
@@ -54,7 +54,7 @@ public class JGenHtmlExecuterTest extends TestCase
 		System.out.println("testAddTracefileWithStringArrAndString");
 		String tracefile = "/foo/bar/test2.info";
 		String[] tracefiles = {"/foo/bar/test.info", "/bar/foo/test.info"};
-		JGenHtmlExecuter instance = new JGenHtmlExecuter();
+		JGenHtmlExecutor instance = new JGenHtmlExecutor();
 		instance.addTracefile(tracefiles);
 		instance.addTracefile(tracefile);
 		String[] tracefilesActual = getTracefiles(instance.buildArgs());
@@ -70,7 +70,7 @@ public class JGenHtmlExecuterTest extends TestCase
 		System.out.println("testAddTracefileWithMultipleStringArrs");
 		String[] tracefiles1 = {"/foo/bar/test.info", "/bar/foo/test.info"};
 		String[] tracefiles2 = {"/foo/bar/test1.info", "/bar/foo/test1.info"};
-		JGenHtmlExecuter instance = new JGenHtmlExecuter();
+		JGenHtmlExecutor instance = new JGenHtmlExecutor();
 		instance.addTracefile(tracefiles1);
 		instance.addTracefile(tracefiles2);
 		String[] tracefilesActual = getTracefiles(instance.buildArgs());
@@ -86,7 +86,7 @@ public class JGenHtmlExecuterTest extends TestCase
 		String tracefile1 = "/foo/bar/test.info";
 		String tracefile2 = "/foo/bar/test2.info";
 		String tracefile3 = "/foo/bar/test3.info";
-		JGenHtmlExecuter instance = new JGenHtmlExecuter();
+		JGenHtmlExecutor instance = new JGenHtmlExecutor();
 		instance.addTracefile(tracefile1);
 		instance.addTracefile(tracefile2);
 		instance.addTracefile(tracefile3);
@@ -105,7 +105,7 @@ public class JGenHtmlExecuterTest extends TestCase
 	{
 		System.out.println("addTracefile");
 		String tracefile = "/foo/bar/test.info";
-		JGenHtmlExecuter instance = new JGenHtmlExecuter();
+		JGenHtmlExecutor instance = new JGenHtmlExecutor();
 		instance.addTracefile(tracefile);
 		String[] tracefilesActual = getTracefiles(instance.buildArgs());
 		assertEquals(1, tracefilesActual.length);
@@ -119,7 +119,7 @@ public class JGenHtmlExecuterTest extends TestCase
 	{
 		System.out.println("testAddTracefileDuplicateStrings");
 		String tracefile = "/foo/bar/test.info";
-		JGenHtmlExecuter instance = new JGenHtmlExecuter();
+		JGenHtmlExecutor instance = new JGenHtmlExecutor();
 		instance.addTracefile(tracefile);
 		instance.addTracefile(tracefile);
 		instance.addTracefile(tracefile);
@@ -142,7 +142,7 @@ public class JGenHtmlExecuterTest extends TestCase
 	{
 		System.out.println("testAddTracefileWithDuplicateStringArrs");
 		String[] tracefiles = {"/foo/bar/test.info", "/bar/foo/test.info"};
-		JGenHtmlExecuter instance = new JGenHtmlExecuter();
+		JGenHtmlExecutor instance = new JGenHtmlExecutor();
 		instance.addTracefile(tracefiles);
 		instance.addTracefile(tracefiles);
 		instance.addTracefile(tracefiles);
@@ -163,7 +163,7 @@ public class JGenHtmlExecuterTest extends TestCase
 		System.out.println("testAddTracefileWithDuplicateStringArrAndString");
 		String tracefile = "/foo/bar/test.info";
 		String[] tracefiles = {"/foo/bar/test.info", "/bar/foo/test.info"};
-		JGenHtmlExecuter instance = new JGenHtmlExecuter();
+		JGenHtmlExecutor instance = new JGenHtmlExecutor();
 		instance.addTracefile(tracefiles);
 		instance.addTracefile(tracefile);
 		instance.addTracefile(tracefiles);
@@ -188,7 +188,7 @@ public class JGenHtmlExecuterTest extends TestCase
 	{
 		System.out.println("setOutdir");
 		String outdir = "/foo/bar/outdir";
-		JGenHtmlExecuter instance = new JGenHtmlExecuter();
+		JGenHtmlExecutor instance = new JGenHtmlExecutor();
 		instance.setOutdir(outdir);
 		String actual = getOutdir(instance.buildArgs());
 		assertEquals(outdir, actual);
@@ -203,7 +203,7 @@ public class JGenHtmlExecuterTest extends TestCase
 		File cssFile = JGenHtmlTestUtils.createCssFile();  // this file must exist for the test to work
 		File lcovrc = JGenHtmlTestUtils.createLcovrcFile(cssFile.getAbsolutePath(), null, null, null, null, null, null, null);  // create an lcovrc file which sets the css file
 		String config = lcovrc.getAbsolutePath();
-		JGenHtmlExecuter instance = new JGenHtmlExecuter();
+		JGenHtmlExecutor instance = new JGenHtmlExecutor();
 		String tracefile = "/foo/bar/test.info";
 		instance.addTracefile(tracefile);
 		instance.setConfig(config);  // point to the lcovrc file created above

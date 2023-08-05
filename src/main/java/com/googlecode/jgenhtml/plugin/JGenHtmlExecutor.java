@@ -26,15 +26,15 @@ import java.util.Set;
  * This class is a helper for the jgenhtml Ant task and Maven mojo.
  * It deals with validation and execution.
  */
-public class JGenHtmlExecuter
+public class JGenHtmlExecutor
 {
-	private Set<String> tracefiles;
+	private final Set<String> tracefiles;
 	private String outdir = null;
 	private String config = null;
 
-	public JGenHtmlExecuter()
+	public JGenHtmlExecutor()
 	{
-		tracefiles = new HashSet<String>();
+		tracefiles = new HashSet<>();
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class JGenHtmlExecuter
 
 	/**
 	 *
-	 * @param in The path to an lcovrc config file.
+	 * @param config The path to an lcovrc config file.
 	 * If not specified will check in user home directory.
 	 */
 	public void setConfig(String config)
@@ -86,7 +86,7 @@ public class JGenHtmlExecuter
 	 */
 	private void validate() throws IllegalStateException
 	{
-		if(tracefiles.size() < 1)
+		if(tracefiles.isEmpty())
 		{
 			throw new IllegalStateException("No tracefiles specified");
 		}
@@ -94,18 +94,18 @@ public class JGenHtmlExecuter
 
 	/**
 	 * Build an args array that can be passed to the main method of jgenhtml.
-	 * @return
+	 * @return A set of cli args.
 	 */
 	String[] buildArgs()
 	{
-		String result[] = new String[0];
-		List<String> args = new ArrayList<String>();
-		if(outdir != null && outdir.length() > 0)
+		String[] result = new String[0];
+		List<String> args = new ArrayList<>();
+		if(outdir != null && !outdir.isEmpty())
 		{
 			args.add("--output-directory");
 			args.add(outdir);
 		}
-		if(config != null && config.length() > 0)
+		if(config != null && !config.isEmpty())
 		{
 			args.add("--config-file");
 			args.add(config);
