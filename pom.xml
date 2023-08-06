@@ -29,8 +29,8 @@
 	</licenses>
 
 	<scm>
-		<connection>scm:git:ssh://git@github.com:ricksbrown/jgenhtml.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com:ricksbrown/jgenhtml.git</developerConnection>
+		<connection>scm:git:https://github.com/ricksbrown/jgenhtml.git</connection>
+		<developerConnection>scm:git:https://github.com/ricksbrown/jgenhtml.git</developerConnection>
 		<url>https://github.com/ricksbrown/jgenhtml</url>
 	</scm>
 
