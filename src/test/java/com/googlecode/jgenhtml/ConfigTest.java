@@ -53,7 +53,7 @@ public class ConfigTest extends TestCase
 		File cssFile = JGenHtmlTestUtils.createCssFile();
 		String cssPath = cssFile.getAbsolutePath();
 		Config instance = JGenHtmlTestUtils.getDummyConfig(new String[]{"-c", cssPath});
-		//instance.setCssFile(cssPath);
+		// instance.setCssFile(cssPath);
 		assertEquals(cssPath, instance.getCssFile().getAbsolutePath());
 	}
 
@@ -65,7 +65,7 @@ public class ConfigTest extends TestCase
 		System.out.println("testSetAndGetCssFileNonExistant");
 		String cssPath = "/foo/bar/moo/baa.css";
 		Config instance = JGenHtmlTestUtils.getDummyConfig(new String[]{"-c", cssPath});
-		//instance.setCssFile(cssPath);
+		// instance.setCssFile(cssPath);
 		assertNull(instance.getCssFile());
 	}
 
@@ -87,7 +87,7 @@ public class ConfigTest extends TestCase
 	{
 		System.out.println("setFunctionCoverage");
 		Config instance = JGenHtmlTestUtils.getDummyConfig(new String[]{"--no-function-coverage"});
-		//instance.setFunctionCoverage(false);
+		// instance.setFunctionCoverage(false);
 		assertFalse(instance.isFunctionCoverage());
 	}
 
@@ -109,7 +109,7 @@ public class ConfigTest extends TestCase
 	{
 		System.out.println("setBranchCoverage");
 		Config instance = JGenHtmlTestUtils.getDummyConfig(new String[]{"--no-branch-coverage"});
-		//instance.setBranchCoverage(false);
+		// instance.setBranchCoverage(false);
 		assertFalse(instance.isBranchCoverage());
 	}
 
@@ -133,7 +133,7 @@ public class ConfigTest extends TestCase
 		System.out.println("setOutRootDir");
 		String outRootDir = FileUtils.getUserDirectoryPath();
 		Config instance = JGenHtmlTestUtils.getDummyConfig(new String[]{"-o", outRootDir});
-		//instance.setOutRootDir(outRootDir);
+		// instance.setOutRootDir(outRootDir);
 		String result = instance.getOutRootDir().getAbsolutePath();
 		assertEquals(FileUtils.getUserDirectoryPath(), result);
 	}
@@ -157,7 +157,7 @@ public class ConfigTest extends TestCase
 		System.out.println("setTitle");
 		String title = "/foo/bar/some.js";
 		Config instance = JGenHtmlTestUtils.getDummyConfig(new String[]{"--title", title});
-		//instance.setTitle(title);
+		// instance.setTitle(title);
 		assertEquals(title, instance.getTitle());
 	}
 
@@ -213,8 +213,8 @@ public class ConfigTest extends TestCase
 		System.out.println("testGetPrefixWithNoPrefix");
 		String prefix = "/foo/bar/moo";
 		Config instance = JGenHtmlTestUtils.getDummyConfig(new String[]{"--prefix", prefix, "--no-prefix"});
-		//instance.setPrefix(prefix);
-		//instance.setNoPrefix(true);
+		// instance.setPrefix(prefix);
+		// instance.setNoPrefix(true);
 		String result = instance.getPrefix();
 		assertNull("prefix should be null when no-prefix is true", result);
 	}
@@ -228,7 +228,7 @@ public class ConfigTest extends TestCase
 		System.out.println("setPrefix");
 		String prefix = "/foo/bar/moo";
 		Config instance = JGenHtmlTestUtils.getDummyConfig(new String[]{"--prefix", prefix});
-		//instance.setPrefix(prefix);
+		// instance.setPrefix(prefix);
 		assertEquals(prefix, instance.getPrefix());
 	}
 
@@ -240,8 +240,8 @@ public class ConfigTest extends TestCase
 		System.out.println("testSetPrefixWithNoPrefix");
 		String prefix = "/foo/bar/moo";
 		Config instance = JGenHtmlTestUtils.getDummyConfig(new String[]{"--no-prefix", "--prefix", prefix});
-		//instance.setNoPrefix(true);
-		//instance.setPrefix(prefix);
+		// instance.setNoPrefix(true);
+		// instance.setPrefix(prefix);
 		assertNull(instance.getPrefix());
 	}
 
@@ -265,7 +265,7 @@ public class ConfigTest extends TestCase
 		System.out.println("setNumSpaces");
 		String numSpaces = "2";
 		Config instance = JGenHtmlTestUtils.getDummyConfig(new String[]{"--num-spaces", numSpaces});
-		//instance.setNumSpaces(numSpaces);
+		// instance.setNumSpaces(numSpaces);
 		int result = instance.getNumSpaces();
 		assertEquals(Integer.parseInt(numSpaces), result);
 	}
@@ -338,7 +338,7 @@ public class ConfigTest extends TestCase
 		System.out.println("testSetNumSpacesInvalid");
 		String numSpaces = "X";
 		Config instance = JGenHtmlTestUtils.getDummyConfig(new String[]{"--num-spaces", numSpaces});
-		//instance.setNumSpaces(numSpaces);
+		// instance.setNumSpaces(numSpaces);
 		int result = instance.getNumSpaces();
 		assertEquals("invalid number should have no side effects", DEFAULT_NUMSPACES, result);
 	}
@@ -354,7 +354,7 @@ public class ConfigTest extends TestCase
 		File lcovrc = JGenHtmlTestUtils.createLcovrcFile(cssFile, prefixes, spaces, functions, branches, sort, noSource, gzipHtml);
 		String alternatePath = lcovrc.getAbsolutePath();
 		Config instance = JGenHtmlTestUtils.getDummyConfig(new String[]{"--config-file", alternatePath, "/some/tracefile"});
-		//instance.loadConfigFile(alternatePath);
+		// instance.loadConfigFile(alternatePath);
 		assertEquals(cssFile, instance.getCssFile().getAbsolutePath());
 		assertFalse(instance.isNoPrefix());
 		assertEquals(Integer.parseInt(spaces), instance.getNumSpaces());

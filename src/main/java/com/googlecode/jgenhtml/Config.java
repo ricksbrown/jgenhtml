@@ -53,7 +53,7 @@ public final class Config
 	private boolean keepDescriptions = false;
 	private boolean noPrefix = false;
 	private String prefix = null;
-	private int numSpaces = -1;//the default in genhtml is 8 but I want to leave tabs alone by default
+	private int numSpaces = -1;  // the default in genhtml is 8 but I want to leave tabs alone by default
 	private boolean noSource = false;
 	private boolean noSort = false;
 	private byte hiLimit = 90;
@@ -66,7 +66,7 @@ public final class Config
 	private boolean quiet = false;
 	private boolean showDetails = false;
 	private String[] traceFiles;
-	private Options options;
+	private final Options options;
 	private boolean htmlOnly;
 
 	/**
@@ -74,7 +74,7 @@ public final class Config
 	 * got rid of rc and ingore-errors because not all genhtml has them
 	 * kept config-file despite this because it's darn useful
 	 */
-	public static enum CmdLineArg {
+	public enum CmdLineArg {
 		HELP("help"),
 		VERSION("version"),
 		QUIET("quiet"),
@@ -100,12 +100,12 @@ public final class Config
 		EPILOG("html-epilog"),
 		HTML_EXT("html-extension"),
 		GZIP("html-gzip"),
-		SORT("sort"),//what the heck point is this?
+		SORT("sort"),  // what the heck point is this?
 		NOSORT("no-sort"),
 		CONFFILE("config-file"),
 		DEMANGLE("demangle-cpp");
 
-		private CmdLineArg(final String text) {
+		CmdLineArg(final String text) {
 			this.text = text;
 		}
 
@@ -120,7 +120,7 @@ public final class Config
 	/**
 	 * config file argument constants.
 	 */
-	public static enum ConfFileArg {
+	public enum ConfFileArg {
 		CSS("genhtml_css_file"),
 		NOPREFIX("genhtml_no_prefix"),
 		NOSOURCE("genhtml_no_source"),
@@ -234,111 +234,110 @@ public final class Config
 	/**
 	 * Load command line args and config file properties into this config instance and reconfigure as appropriate.
 	 * @param argv Command line args.
-	 * @throws ParseException
 	 */
 	public void initializeUserPrefs(String[] argv) throws ParseException
 	{
 		CommandLineParser parser = new PosixParser();
 		CommandLine cmd = parser.parse(options, argv);
 
-		if(cmd.hasOption(CmdLineArg.HELP.toString()))
+		if (cmd.hasOption(CmdLineArg.HELP.toString()))
 		{
 			this.help = true;
 		}
-		else if(cmd.hasOption(CmdLineArg.VERSION.toString()))
+		else if (cmd.hasOption(CmdLineArg.VERSION.toString()))
 		{
 			this.version = true;
 		}
 		else
 		{
-			if(cmd.hasOption(Config.CmdLineArg.QUIET.toString()))
+			if (cmd.hasOption(Config.CmdLineArg.QUIET.toString()))
 			{
 				this.quiet = true;
 				Logger parent = Logger.getLogger("com.googlecode.jgenhtml");
 				parent.setLevel(Level.WARNING);
 			}
-			if(cmd.hasOption(CmdLineArg.SHOW_DETAILS.toString()))
+			if (cmd.hasOption(CmdLineArg.SHOW_DETAILS.toString()))
 			{
 				this.setShowDetails(true);
 			}
-			if(cmd.hasOption(CmdLineArg.OUTPUT.toString()))
+			if (cmd.hasOption(CmdLineArg.OUTPUT.toString()))
 			{
 				this.setOutRootDir(cmd.getOptionValue(CmdLineArg.OUTPUT.toString()));
 			}
-			if(cmd.hasOption(CmdLineArg.TITLE.toString()))
+			if (cmd.hasOption(CmdLineArg.TITLE.toString()))
 			{
 				this.setTitle(cmd.getOptionValue(CmdLineArg.TITLE.toString()));
 			}
-			if(cmd.hasOption(CmdLineArg.CSS.toString()))
+			if (cmd.hasOption(CmdLineArg.CSS.toString()))
 			{
 				this.setCssFile(cmd.getOptionValue(CmdLineArg.CSS.toString()));
 			}
-			if(cmd.hasOption(CmdLineArg.DESCFILE.toString()))
+			if (cmd.hasOption(CmdLineArg.DESCFILE.toString()))
 			{
 				this.setDescFile(cmd.getOptionValue(CmdLineArg.DESCFILE.toString()));
 			}
-			if(cmd.hasOption(CmdLineArg.BASEFILE.toString()))
+			if (cmd.hasOption(CmdLineArg.BASEFILE.toString()))
 			{
 				this.setBaseFile(cmd.getOptionValue(CmdLineArg.BASEFILE.toString()));
 			}
-			if(cmd.hasOption(CmdLineArg.KEEPDESC.toString()))
+			if (cmd.hasOption(CmdLineArg.KEEPDESC.toString()))
 			{
 				this.setKeepDescriptions(true);
 			}
-			if(cmd.hasOption(CmdLineArg.SPACES.toString()))
+			if (cmd.hasOption(CmdLineArg.SPACES.toString()))
 			{
 				this.setNumSpaces(cmd.getOptionValue(CmdLineArg.SPACES.toString()));
 			}
-			if(cmd.hasOption(CmdLineArg.NOSOURCE.toString()))
+			if (cmd.hasOption(CmdLineArg.NOSOURCE.toString()))
 			{
 				this.setNoSource(true);
 			}
-			if(cmd.hasOption(CmdLineArg.GZIP.toString()))
+			if (cmd.hasOption(CmdLineArg.GZIP.toString()))
 			{
 				this.setGzip(true);
 			}
-			if(cmd.hasOption(CmdLineArg.NOSORT.toString()))
+			if (cmd.hasOption(CmdLineArg.NOSORT.toString()))
 			{
 				this.setNoSort(true);
 			}
-			else if(cmd.hasOption(CmdLineArg.SORT.toString()))
+			else if (cmd.hasOption(CmdLineArg.SORT.toString()))
 			{
-				this.setNoSort(false);//wow, this is totally pointless
+				this.setNoSort(false);  // wow, this is totally pointless
 			}
-			if(cmd.hasOption(CmdLineArg.LEGEND.toString()))
+			if (cmd.hasOption(CmdLineArg.LEGEND.toString()))
 			{
 				this.setLegend(true);
 			}
-			if(cmd.hasOption(CmdLineArg.HTML_EXT.toString()))
+			if (cmd.hasOption(CmdLineArg.HTML_EXT.toString()))
 			{
 				this.setHtmlExt(cmd.getOptionValue(CmdLineArg.HTML_EXT.toString()));
 			}
-			if(cmd.hasOption(CmdLineArg.NOFUNCOV.toString()))
+			if (cmd.hasOption(CmdLineArg.NOFUNCOV.toString()))
 			{
 				this.setFunctionCoverage(false);
 			}
-			else if(cmd.hasOption(CmdLineArg.FUNCOV.toString()))
+			else if (cmd.hasOption(CmdLineArg.FUNCOV.toString()))
 			{
 				this.setFunctionCoverage(true);
 			}
-			if(cmd.hasOption(CmdLineArg.NOBRANCOV.toString()))
+			if (cmd.hasOption(CmdLineArg.NOBRANCOV.toString()))
 			{
 				this.setBranchCoverage(false);
 			}
-			else if(cmd.hasOption(CmdLineArg.BRANCOV.toString()))
+			else if (cmd.hasOption(CmdLineArg.BRANCOV.toString()))
 			{
 				this.setBranchCoverage(true);
 			}
-			if(cmd.hasOption(CmdLineArg.NOPREFIX.toString()))
+			if (cmd.hasOption(CmdLineArg.NOPREFIX.toString()))
 			{
 				this.setNoPrefix(true);
 			}
-			else if(cmd.hasOption(CmdLineArg.PREFIX.toString()))
+			else if (cmd.hasOption(CmdLineArg.PREFIX.toString()))
 			{
 				this.setPrefix(cmd.getOptionValue(CmdLineArg.PREFIX.toString()));
 			}
 			traceFiles = cmd.getArgs();
-			if(traceFiles != null && traceFiles.length > 0)
+			if (traceFiles != null && traceFiles.length > 0)
 			{
 				this.loadConfigFile(cmd.getOptionValue(CmdLineArg.CONFFILE.toString()));
 			}
@@ -351,95 +350,93 @@ public final class Config
 	 * Does not look for a system wide config file because there is no consistent directory to
 	 * look in across all platforms.
 	 *
-	 * @param alternatePath
+	 * @param alternatePath Load the config from here instead of the default location.
 	 */
 	private void loadConfigFile(final String alternatePath)
 	{
 		try
 		{
-			//don't use FileUtils.getUserDirectoryPath() here, it was causing issues when run from Ant
+			// don't use FileUtils.getUserDirectoryPath() here, it was causing issues when run from Ant
 			String lcovrc = System.getProperty("user.home") + File.separatorChar + ".lcovrc";
 			Properties properties = loadFileToProperties(alternatePath);
-			if(properties != null || (properties = loadFileToProperties(lcovrc)) != null)
+			if (properties != null || (properties = loadFileToProperties(lcovrc)) != null)
 			{
 
 				LOGGER.log(Level.INFO, "Loaded config file {0}.", lcovrc);
-				if(properties.containsKey(ConfFileArg.CSS.toString()))
+				if (properties.containsKey(ConfFileArg.CSS.toString()))
 				{
 					setCssFile(properties.getProperty(ConfFileArg.CSS.toString()));
 				}
 				Integer optionValue = getNumericValue(properties, ConfFileArg.FUNCOV.toString());
-				if(optionValue != null)
+				if (optionValue != null)
 				{
 					setFunctionCoverage(optionValue != 0);
 				}
 				optionValue = getNumericValue(properties, ConfFileArg.BRANCOV.toString());
-				if(optionValue != null)
+				if (optionValue != null)
 				{
 					setBranchCoverage(optionValue != 0);
 				}
 				optionValue = getNumericValue(properties, ConfFileArg.GZIP.toString());
-				if(optionValue != null)
+				if (optionValue != null)
 				{
 					setGzip(optionValue != 0);
 				}
 				optionValue = getNumericValue(properties, ConfFileArg.KEEPDESC.toString());
-				if(optionValue != null)
+				if (optionValue != null)
 				{
 					setKeepDescriptions(optionValue != 0);
 				}
 				optionValue = getNumericValue(properties, ConfFileArg.NOSOURCE.toString());
-				if(optionValue != null)
+				if (optionValue != null)
 				{
 					setNoSource(optionValue != 0);
 				}
 				optionValue = getNumericValue(properties, ConfFileArg.SORT.toString());
-				if(optionValue != null)
+				if (optionValue != null)
 				{
 					setNoSort(optionValue == 0);
 				}
 				optionValue = getNumericValue(properties, ConfFileArg.SPACES.toString());
-				if(optionValue != null)
+				if (optionValue != null)
 				{
 					setNumSpaces(optionValue);
 				}
 				optionValue = getNumericValue(properties, ConfFileArg.HILIMIT.toString());
-				if(optionValue != null)
+				if (optionValue != null)
 				{
 					setHiLimit(optionValue);
 				}
 				optionValue = getNumericValue(properties, ConfFileArg.MEDLIMIT.toString());
-				if(optionValue != null)
+				if (optionValue != null)
 				{
 					setMedLimit(optionValue);
 				}
 				optionValue = getNumericValue(properties, ConfFileArg.NOPREFIX.toString());
-				if(optionValue != null)
+				if (optionValue != null)
 				{
 					setNoPrefix(optionValue != 0);
 				}
 				optionValue = getNumericValue(properties, ConfFileArg.LEGEND.toString());
-				if(optionValue != null)
+				if (optionValue != null)
 				{
 					setLegend(optionValue != 0);
 				}
-				if(properties.containsKey(ConfFileArg.HTML_EXT.toString()))
+				if (properties.containsKey(ConfFileArg.HTML_EXT.toString()))
 				{
 					setHtmlExt(properties.getProperty(ConfFileArg.HTML_EXT.toString()));
 				}
 				optionValue = getNumericValue(properties, ConfFileArg.HTMLONLY.toString());
-				if(optionValue != null)
+				if (optionValue != null)
 				{
 					setHtmlOnly(optionValue != 0);
 				}
 				optionValue = getNumericValue(properties, ConfFileArg.VERBOSE.toString());
-				if(optionValue != null)
+				if (optionValue != null && (optionValue != 0))
 				{
-					if(optionValue != 0)
-					{
 						Logger parent = Logger.getLogger("com.googlecode.jgenhtml");
 						parent.setLevel(Level.ALL);
-					}
+
 				}
 			}
 		}
@@ -451,7 +448,6 @@ public final class Config
 
 	/**
 	 * Displays help message to user.
-	 * @param options CommandLine options.
 	 */
 	public void showCmdLineHelp()
 	{
@@ -467,10 +463,10 @@ public final class Config
 	{
 		File result = null;
 		String newPath = path.trim();
-		if(newPath.length() > 0)
+		if (!newPath.isEmpty())
 		{
 			result = new File(newPath);
-			if(!result.exists())
+			if (!result.exists())
 			{
 				result = null;
 			}
@@ -496,7 +492,7 @@ public final class Config
 	 */
 	private void setCssFile(final String cssPath) {
 		File file = getFileIfExists(cssPath);
-		if(file != null)
+		if (file != null)
 		{
 			this.cssFile = file;
 		}
@@ -545,16 +541,16 @@ public final class Config
 	 */
 	public void setHtmlExt(final String htmlExt)
 	{
-		if(htmlExt != null)
+		if (htmlExt != null)
 		{
 			String ext = htmlExt.trim();
-			if(ext.length() > 0)
+			if (!ext.isEmpty())
 			{
-				if(!ext.startsWith("."))
+				if (!ext.startsWith("."))
 				{
 					ext = '.' + ext;
 				}
-				if(ext.length() > 1)
+				if (ext.length() > 1)
 				{
 					this.htmlExt = ext;
 					LOGGER.log(Level.FINE, "setting html extension to {0}", ext);
@@ -581,7 +577,7 @@ public final class Config
 	 */
 	private void setBaseFile(final String baseFile) {
 		File file = getFileIfExists(baseFile);
-		if(file != null)
+		if (file != null)
 		{
 			this.baseFile = file;
 		}
@@ -602,7 +598,7 @@ public final class Config
 	 */
 	private void setDescFile(final String descFile) {
 		File file = getFileIfExists(descFile);
-		if(file != null)
+		if (file != null)
 		{
 			this.descFile = file;
 		}
@@ -655,7 +651,7 @@ public final class Config
 
 	/**
 	 * Turn source code page generation on or off.
-	 * @param noSource
+	 * @param noSource true to turn this feature on.
 	 */
 	private void setNoSource(final boolean noSource)
 	{
@@ -664,7 +660,7 @@ public final class Config
 
 	/**
 	 * Turn table sorting or off.
-	 * @param noSort
+	 * @param noSort true to turn this feature on.
 	 */
 	private void setNoSort(final boolean noSort)
 	{
@@ -682,7 +678,7 @@ public final class Config
 
 	/**
 	 * Turn function coverage reporting on or off.
-	 * @param functionCoverage
+	 * @param functionCoverage true to turn on function coverage reporting.
 	 */
 	private void setFunctionCoverage(final boolean functionCoverage)
 	{
@@ -700,7 +696,7 @@ public final class Config
 
 	/**
 	 * Turn branch coverage reporting on or off.
-	 * @param branchCoverage
+	 * @param branchCoverage true to turn on branch coverage.
 	 */
 	private void setBranchCoverage(final boolean branchCoverage)
 	{
@@ -717,12 +713,12 @@ public final class Config
 
 	/**
 	 * Sets the output directory where all the output will be generated.
-	 * @param outputDir The path to the desired output directory.
+	 * @param outRootDir The path to the desired output directory.
 	 */
 	private void setOutRootDir(final String outRootDir)
 	{
 		File file = new File(outRootDir);
-		if(!file.exists())
+		if (!file.exists())
 		{
 			file.mkdirs();
 		}
@@ -745,7 +741,7 @@ public final class Config
 	private void setTitle(final String title)
 	{
 		String newTitle = title.trim();
-		if(newTitle.length() > 0)
+		if (!newTitle.isEmpty())
 		{
 			this.title = title;
 		}
@@ -757,12 +753,12 @@ public final class Config
 	 */
 	public boolean isLegend()
 	{
-		return legend;
+		return this.legend;
 	}
 
 	/**
 	 * Set the user preference for displaying the legend in the coverage reports.
-	 * @param legend
+	 * @param legend True to display the legend.
 	 */
 	private void setLegend(boolean legend)
 	{
@@ -771,11 +767,10 @@ public final class Config
 
 	/**
 	 * Get the override CSS file.
-	 * @param cssPath The override CSS file if it has been set, otherwise null.
 	 */
 	public File getCssFile()
 	{
-		return cssFile;
+		return this.cssFile;
 	}
 
 	/**
@@ -803,7 +798,7 @@ public final class Config
 	public String getPrefix()
 	{
 		String result = prefix;
-		if(this.noPrefix)
+		if (this.noPrefix)
 		{
 			result = null;
 		}
@@ -816,7 +811,7 @@ public final class Config
 	 */
 	private void setPrefix(String prefix)
 	{
-		if(!this.noPrefix)
+		if (!this.noPrefix)
 		{
 			this.prefix = prefix;
 		}
@@ -850,11 +845,11 @@ public final class Config
 
 	/**
 	 * Set the user preference for expanding tab characters to spaces in source code view.
-	 * @param numSpaces The number of spaces tabs will be expanded to.
+	 * @param numspaces The number of spaces tabs will be expanded to.
 	 */
 	private void setNumSpaces(final int numspaces)
 	{
-		if(numspaces >= 0)//is zero too low?
+		if (numspaces >= 0)  // is zero too low?
 		{
 			this.numSpaces = numspaces;
 		}
@@ -874,7 +869,7 @@ public final class Config
 	 */
 	private void setHiLimit(final int hiLimit)
 	{
-		if(hiLimit > 0 && hiLimit <= 100)//genhtml just accepts whatever
+		if (hiLimit > 0 && hiLimit <= 100)  // genhtml just accepts whatever
 		{
 			this.hiLimit = (byte)hiLimit;
 		}
@@ -895,7 +890,7 @@ public final class Config
 	 */
 	private void setMedLimit(final int medLimit)
 	{
-		if(medLimit > 0 && medLimit <= 100)//genhtml just accepts whatever
+		if (medLimit > 0 && medLimit <= 100)  // genhtml just accepts whatever
 		{
 			this.medLimit = (byte)medLimit;
 		}
@@ -957,12 +952,11 @@ public final class Config
 	private Integer getNumericValue(final Properties properties, final String optName)
 	{
 		Integer result = null;
-		if(properties.containsKey(optName))
+		if (properties.containsKey(optName))
 		{
 			try
 			{
-				int propval = Integer.parseInt(properties.getProperty(optName));
-				result = propval;
+				result = Integer.parseInt(properties.getProperty(optName));
 			}
 			catch(NumberFormatException ex)
 			{
@@ -977,19 +971,18 @@ public final class Config
 	 * Any backslashes in the file will be escaped before being loaded to properties.
 	 * @param path The path to the config file
 	 * @return An instance of Properties if successfully loaded, otherwise null
-	 * @throws IOException
 	 */
 	private static Properties loadFileToProperties(final String path) throws IOException
 	{
 		Properties result = null;
-		if(path != null)
+		if (path != null)
 		{
 			File configFile = new File(path);
-			if(configFile.exists())
+			if (configFile.exists())
 			{
 				result = new Properties();
 				String propFileContent = FileUtils.readFileToString(configFile);
-				propFileContent = propFileContent.replace("\\", "\\\\");//can't expect the lcov config file to escape backslashes
+				propFileContent = propFileContent.replace("\\", "\\\\");  // can't expect the lcov config file to escape backslashes
 				result.load(new StringReader(propFileContent));
 			}
 		}

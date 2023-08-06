@@ -22,6 +22,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
@@ -76,6 +78,13 @@ public class JGenHtmlUtils
 	{
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		return sdf.format(new Date());
+	}
+
+	public static File processFilePath(final String filePath)
+	{
+		Path path = Paths.get(filePath);
+		path = path.normalize();
+		return path.toFile();
 	}
 
 	/**
@@ -288,7 +297,7 @@ public class JGenHtmlUtils
 		}
 
 		String result = null;
-		//Find and return prefix with minimal sum
+		// Find and return prefix with minimal sum
 		for(String current : keys)
 		{
 			if(result == null)

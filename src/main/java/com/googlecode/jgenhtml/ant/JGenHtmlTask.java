@@ -15,7 +15,7 @@
  */
 package com.googlecode.jgenhtml.ant;
 
-import com.googlecode.jgenhtml.plugin.JGenHtmlExecuter;
+import com.googlecode.jgenhtml.plugin.JGenHtmlExecutor;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -47,7 +47,7 @@ import org.apache.tools.ant.types.Path;
  */
 public class JGenHtmlTask extends Task
 {
-	private JGenHtmlExecuter executer = new JGenHtmlExecuter();
+	private JGenHtmlExecutor executer = new JGenHtmlExecutor();
 	private List<Path> paths = null;
 
 	/**

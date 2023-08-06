@@ -28,7 +28,7 @@ public class Line extends SourceCode
 {
 	private String code = null;
 	private int lineNumber = -1;
-	private List<Branch> branches = new ArrayList<Branch>();
+	private final List<Branch> branches = new ArrayList<>();
 	private static String expander = null;
 
 	/**
@@ -37,7 +37,7 @@ public class Line extends SourceCode
 	 */
 	public Line(final int lineNumber)
 	{
-		super(false);//by default assume the line is not executable
+		super(false);  // by default assume the line is not executable
 		setLineNo(lineNumber);
 	}
 
@@ -123,7 +123,7 @@ public class Line extends SourceCode
 	{
 		if(code != null)
 		{
-			this.code = code.replaceAll("\\s+$", "");//right trim;
+			this.code = code.replaceAll("\\s+$", "");  // right trim
 			if(expander != null)
 			{
 				this.code = this.code.replaceAll("\t", expander);

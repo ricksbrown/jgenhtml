@@ -416,7 +416,10 @@ td span.branch:last-of-type
 	border-right-width: 1px;
 }
 
-
+td[headers*='-percent']
+{
+	font-weight: bold;
+}
 
 .taken:before
 {

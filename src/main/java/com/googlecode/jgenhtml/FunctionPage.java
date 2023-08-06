@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -35,18 +34,18 @@ import org.w3c.dom.Element;
 public class FunctionPage extends CoveragePage
 {
 	private static final Logger LOGGER = Logger.getLogger(FunctionPage.class.getName());
-	private TestCaseSourceFile testCaseSourceFile;
-	private Map<String, Function> functions;
+	private final TestCaseSourceFile testCaseSourceFile;
+	private final Map<String, Function> functions;
 
 	public FunctionPage(final TestCaseSourceFile testCaseSourceFile) throws ParserConfigurationException
 	{
 		super(testCaseSourceFile.getTestName(), testCaseSourceFile.getPageName());
 		this.testCaseSourceFile = testCaseSourceFile;
-		functions = new HashMap<String, Function>();
+		functions = new HashMap<>();
 	}
 
 	@Override
-	public void writeToFileSystem() throws TransformerConfigurationException, TransformerException, IOException
+	public void writeToFileSystem() throws TransformerException, IOException
 	{
 		Document document = this.getDoc();
 		Element functionsRoot = document.createElement("functions");
@@ -121,7 +120,7 @@ public class FunctionPage extends CoveragePage
 		{
 			result = functions.get(name);
 		}
-		else if(dontCreate == false)
+		else if(!dontCreate)
 		{
 			result = new Function(name);
 			functions.put(name, result);
@@ -139,11 +138,11 @@ public class FunctionPage extends CoveragePage
 	 */
 	public void addFunctionData(final String testCaseName, final String line, final boolean isBaseline)
 	{
-		boolean isFn = false;
-		if(line.startsWith("FNDA:") || (!isBaseline && (isFn = line.startsWith("FN:"))))
+		boolean isFn = line.startsWith("FN:");
+		if(line.startsWith("FNDA:") || (!isBaseline && isFn))
 		{
-			//FN:<line number of function start>,<function name>
-			//FNDA:<execution count>,<function name>
+			// FN:<line number of function start>, <function name>
+			// FNDA:<execution count>, <function name>
 			String[] data = JGenHtmlUtils.extractLineValues(line);
 			if(data != null && data.length == 2)
 			{

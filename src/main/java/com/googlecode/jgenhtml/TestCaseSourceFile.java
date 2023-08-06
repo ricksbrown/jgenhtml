@@ -26,7 +26,6 @@ import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -47,7 +46,7 @@ public class TestCaseSourceFile extends CoveragePage
 	public TestCaseSourceFile(final String testName, final String pageName) throws ParserConfigurationException
 	{
 		super(testName, pageName);
-		this.lineItems = new TreeMap<Integer, Line>();
+		this.lineItems = new TreeMap<>();
 		this.functionPage = new FunctionPage(this);
 	}
 
@@ -60,7 +59,7 @@ public class TestCaseSourceFile extends CoveragePage
 		if(line.startsWith("BRDA:"))
 		{
 			// BRDA:<line number>,<block number>,<branch number>,<taken>
-			String[] data = JGenHtmlUtils.extractLineValues(line);//can't get as ints because "taken" can be '-' if it was not taken, anywho we need strings for attributes
+			String[] data = JGenHtmlUtils.extractLineValues(line);  // can't get as ints because "taken" can be '-' if it was not taken, anywho we need strings for attributes
 			if(data != null && data.length == 4)
 			{
 				String block = data[1];
@@ -68,22 +67,17 @@ public class TestCaseSourceFile extends CoveragePage
 				int taken = Integer.parseInt(data[3]);
 
 				Line lineItem = getLineAt(data[0]);
-
-				Branch branch = lineItem.getBranch(block, number);
-				if(isBaseline)
+				Branch branch = getBranch(lineItem, block, number, !isBaseline);
+				if (branch != null)
 				{
-					branch.setHits(testCaseName, branch.getHits(testCaseName) - taken);
-				}
-				else
-				{
-					if(branch == null)
+					if (isBaseline)
 					{
-						branch = new Branch();
-						branch.setBlock(block);
-						branch.setNumber(number);
-						lineItem.addBranch(branch);
+						branch.setHits(testCaseName, branch.getHits(testCaseName) - taken);
 					}
-					branch.setHits(testCaseName, branch.getHits(testCaseName) + taken);
+					else
+					{
+						branch.setHits(testCaseName, branch.getHits(testCaseName) + taken);
+					}
 				}
 			}
 			else
@@ -91,6 +85,19 @@ public class TestCaseSourceFile extends CoveragePage
 				LOGGER.log(Level.FINE, "Could not parse line: {0}", line);
 			}
 		}
+	}
+
+	private Branch getBranch(Line line, String block, String number, boolean create)
+	{
+		Branch branch = line.getBranch(block, number);
+		if(branch == null && create)
+		{
+			branch = new Branch();
+			branch.setBlock(block);
+			branch.setNumber(number);
+			line.addBranch(branch);
+		}
+		return branch;
 	}
 
 	/**
@@ -170,7 +177,7 @@ public class TestCaseSourceFile extends CoveragePage
 	 * @param line a line (from the tracefile) containing data about this source file.
 	 * @param isBaseline true if this line comes from a baseline file
 	 */
-	public void processLine(final String testCaseName, final String line, final boolean isBaseline) throws ParserConfigurationException
+	public void processLine(final String testCaseName, final String line, final boolean isBaseline)
 	{
 		String dataLine = line.trim();
 		if(dataLine.startsWith("BR"))
@@ -188,7 +195,7 @@ public class TestCaseSourceFile extends CoveragePage
 	}
 
 	@Override
-	public void writeToFileSystem() throws TransformerConfigurationException, TransformerException, IOException
+	public void writeToFileSystem() throws TransformerException, IOException
 	{
 		Document document = this.getDoc();
 		Element lines = document.createElement("lines");
@@ -264,7 +271,7 @@ public class TestCaseSourceFile extends CoveragePage
 
 	public Collection<String> getTestCaseNames()
 	{
-		Collection<String> result = new HashSet<String>();
+		Collection<String> result = new HashSet<>();
 		for(Line line : lineItems.values())
 		{
 			result.addAll(line.getTestCaseNames(true));
@@ -368,16 +375,16 @@ public class TestCaseSourceFile extends CoveragePage
 	/**
 	 * Provide the source code file.
 	 * @param sourceFile The file on the file system.
-	 * @throws IOException
+	 * @throws IOException If bad stuff happens with the sourceFile.
 	 */
 	protected void setSourceFile(final File sourceFile) throws IOException
 	{
 		super.setPageName(sourceFile.getName());
 
-		File parentDir = sourceFile.getParentFile();
+		File parentDir = JGenHtmlUtils.processFilePath(sourceFile.getAbsolutePath()).getParentFile();
 		if(parentDir != null)
 		{
-			this.setPath(parentDir.getCanonicalPath());//canonical path is definitely needed here
+			this.setPath(parentDir.getAbsolutePath());  // absolute path is definitely needed here
 			if(sourceFile.exists())
 			{
 				hasSource = true;
@@ -401,8 +408,7 @@ public class TestCaseSourceFile extends CoveragePage
 	 */
 	private void loadSourceFile(final File sourceFile) throws IOException
 	{
-		BufferedReader br = new BufferedReader(new FileReader(sourceFile));
-		try
+		try (BufferedReader br = new BufferedReader(new FileReader(sourceFile)))
 		{
 			String line;
 			int i = 1;
@@ -412,10 +418,6 @@ public class TestCaseSourceFile extends CoveragePage
 				lineItem.setCode(line);
 				setLineAt(i++, lineItem);
 			}
-		}
-		finally
-		{
-			br.close();
 		}
 	}
 

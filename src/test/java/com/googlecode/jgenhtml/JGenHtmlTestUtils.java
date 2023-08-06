@@ -20,12 +20,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
@@ -34,10 +34,7 @@ import junit.framework.TestCase;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 import org.ccil.cowan.tagsoup.Parser;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
@@ -151,9 +148,7 @@ public class JGenHtmlTestUtils
 
 	public static String getBaselineFile()
 	{
-		String[] result = new String[]{"cov.gcda.baseline.info"};
-		addPathAndEnsureExists(result);
-		return result[0];
+		return getTraceFilesWithBranchAndFuncData()[0];  // Simply use the input files as the baseline, it should null everything out
 	}
 
 	/**
@@ -164,7 +159,7 @@ public class JGenHtmlTestUtils
 	private static void addPathAndEnsureExists(final String[] traceFiles)
 	{
 		File dir = getTestDir();
-		for(int i=0; i<traceFiles.length; i++)//append the full path to the file names and make sure they actually exist
+		for(int i=0; i<traceFiles.length; i++)  // append the full path to the file names and make sure they actually exist
 		{
 			String name = traceFiles[i];
 			traceFiles[i] = dir.getAbsolutePath() + File.separatorChar + name;
@@ -183,6 +178,17 @@ public class JGenHtmlTestUtils
 		return result;
 	}
 
+	public static boolean arrayEqualsIgnoreOrder(final String[] a, final String[] b)
+	{
+		boolean result = a != null && b != null;
+		if (result) {
+			List<String> aList = Arrays.asList(a);
+			List<String> bList = Arrays.asList(b);
+			result = aList.containsAll(bList) &&  bList.containsAll(aList);
+		}
+		return result;
+	}
+
 	/**
 	 * Get an lcovrc file, creating it if it doesn't exist.
 	 * @param cssFile
@@ -198,7 +204,7 @@ public class JGenHtmlTestUtils
 		try
 		{
 			List<String> lines = new ArrayList<String>();
-			//throw in a few comments and stuff
+			// throw in a few comments and stuff
 			lines.add("#");
 			lines.add("#jgenthml test file");
 			lines.add("#");
@@ -250,7 +256,6 @@ public class JGenHtmlTestUtils
 
 	/**
 	 * Get a css file, creating it if it doesn't exist.
-	 * @return
 	 */
 	public static File createCssFile()
 	{
@@ -285,13 +290,12 @@ public class JGenHtmlTestUtils
 		return sdf.format(new Date());
 	}
 
-	//first dimension
+	// first dimension
 	static final int LINES = 0;
 
-	//second dimension
+	// second dimension
 	static final int HIT = 0;
 	static final int TOTAL = 1;
-	static final int PERCENT = 2;
 
 	static final String[][] TOP_IDX_STATS_EXPECTED = new String[][]{
 		new String[]{"31", "40", "77.5%"},
@@ -306,6 +310,7 @@ public class JGenHtmlTestUtils
 	};
 
 	static final String[][] SECOND_IDX_STATS_EXPECTED = new String[][]{
+		// Based on results from LCOV version 1.14
 		new String[]{"18", "24", "75.0%"},
 		new String[]{"0", "0", "-"},
 		new String[]{"0", "0", "-"}
@@ -341,9 +346,10 @@ public class JGenHtmlTestUtils
 	};
 
 	static final String[][] TOP_IDX_INDEX_EXPECTED = new String[][]{
+		// Based on results from LCOV version 1.14
 		new String[]{"/home/rick/tests", "77.8%", "77.8%", "7/9", "-", "0/0", "-", "0/0"},
-		new String[]{"/some/thing", "75.0%", "75.0%", "18/24", "-", "0/0", "-", "0/0"},
-		new String[]{"/some/thing/else", "85.7%", "85.7%", "6/7", "-", "0/0", "-", "0/0"}
+		new String[]{"thing", "75.0%", "75.0%", "18/24", "-", "0/0", "-", "0/0"},
+		new String[]{"thing/else", "85.7%", "85.7%", "6/7", "-", "0/0", "-", "0/0"}
 	};
 
 	static final String[][] FIRST_IDX_INDEX_EXPECTED = new String[][]{
@@ -356,36 +362,50 @@ public class JGenHtmlTestUtils
 	};
 
 	static final String[][] THIRD_IDX_INDEX_EXPECTED = new String[][]{
+		// Based on results from LCOV version 1.14
 		new String[]{"bob.js", "85.7%", "85.7%", "6/7", "-", "0/0", "-", "0/0"}
 	};
 
+	/*
+		Stats table for cov.gcda.info
+	 */
 	static final String[][] TOP_C_IDX_STATS_EXPECTED = new String[][]{
-		new String[]{"21", "28", "75.0%"},
-		new String[]{"4", "11", "36.4%"},
-		new String[]{"17", "26", "65.4%"}
+		new String[]{"24", "35", "68.6%"},
+		new String[]{"4", "14", "28.6%"},
+		new String[]{"18", "32", "56.2%"}
 	};
 
+	/*
+		Index table for cov.gcda.info
+	 */
 	static final String[][] TOP_C_IDX_INDEX_EXPECTED = new String[][]{
-		new String[]{"/home/fred/projects/test/gcov", "28.6 %", "28.6 %", "2/7", "0.0%", "0/6", "33.3%", "2/6"},
-		new String[]{"/test/gcov", "90.5%", "90.5%", "19/21", "80.0%", "4/5", "75.0%", "15/20"}
+		new String[]{"/home/fred/projects/test/gcov", "28.6%", "28.6%", "2/7", "0.0%", "0/6", "33.3%", "2/6"},
+		new String[]{"gcov", "78.6%", "78.6%", "22/28", "50.0%", "4/8", "61.5%", "16/26"}
 	};
 
+	/*
+		Stats table for cov.gcda.info/gcov
+	 */
 	static final String[][] FIRST_C_IDX_STATS_EXPECTED = new String[][]{
-		new String[]{"17", "21", "81.0%"},
-		new String[]{"3", "5", "60.0%"},
-		new String[]{"13", "20", "65.0%"}
+		new String[]{"22", "28", "78.6%"},
+		new String[]{"4", "8", "50.0%"},
+		new String[]{"16", "26", "61.5%"}
 	};
 
+	/*
+		Index table for cov.gcda.info/gcov
+	 */
 	static final String[][] FIRST_C_IDX_INDEX_EXPECTED = new String[][]{
-		new String[]{"cov.c", "100.0%", "100.0%", "7/7", "66.7%", "2/3", "83.3%", "5/6"},
+		new String[]{"cov.c", "85.7%", "85.7%", "6/7", "33.3%", "1/3", "66.7%", "4/6"},
 		new String[]{"cov2.c", "85.7%", "85.7%", "6/7", "100.0%", "1/1", "62.5%", "5/8"},
-		new String[]{"cov3.c", "85.7%", "85.7%", "6/7", "100.0%", "1/1", "83.3%", "5/6"}
+		new String[]{"cov3.c", "85.7%", "85.7%", "6/7", "100.0%", "1/1", "83.3%", "5/6"},
+		new String[]{"cov4.c", "57.1%", "57.1%", "4/7", "33.3%", "1/3", "33.3%", "2/6"}
 	};
 
 	static final String[][] COV_STATS_EXPECTED = new String[][]{
-		new String[]{"7", "7", "100.0%"},
-		new String[]{"2", "3", "66.7%"},
-		new String[]{"5", "6", "83.3%"}
+		new String[]{"6", "7", "85.7%"},
+		new String[]{"1", "3", "33.3%"},
+		new String[]{"4", "6", "66.7%"}
 	};
 
 	static final String[][] COV2_STATS_EXPECTED = new String[][]{
@@ -402,7 +422,7 @@ public class JGenHtmlTestUtils
 
 	static final String[][] COV_FUNC_EXPECTED = new String[][]{
 		new String[]{"main", "4"},
-		new String[]{"mainThree", "2"},
+		new String[]{"mainThree", "0"},
 		new String[]{"mainTwo", "0"}
 	};
 
@@ -414,32 +434,44 @@ public class JGenHtmlTestUtils
 		new String[]{"main", "1"}
 	};
 
+
+	/*
+		Stats table for cov.gcda.info with baseline cov.gcda.info (itself)
+	 */
 	static final String[][] BASELINED_TOP_C_IDX_STATS_EXPECTED = new String[][]{
-		new String[]{"9", "21", "42.9%"},
-		new String[]{"2", "5", "40.0%"},
-		new String[]{"7", "20", "35.0%"}
+		new String[]{"0", "35", "0.0%"},
+		new String[]{"0", "14", "0.0%"},
+		new String[]{"0", "32", "0.0%"}  // Genhtml seems to set the branches to 0, is that a bug? I don't understand why.
 	};
 
+	/*
+		Index table for cov.gcda.info with baseline cov.gcda.info (itself)
+	 */
 	static final String[][] BASELINED_TOP_C_IDX_INDEX_EXPECTED = new String[][]{
-		new String[]{"/test/gcov", "42.9%", "42.9%", "9/21", "40.0%", "2/5", "35.0%", "7/20"}
+		new String[]{"/home/fred/projects/test/gcov", "0.0%", "0.0%", "0/7", "0.0%", "0/6", "0.0%", "0/6"},
+		new String[]{"gcov", "0.0%", "0.0%", "0/28", "0.0%", "0/8", "0.0%", "0/26"}
 	};
 
 	static final String[][] BASELINED_FIRST_C_IDX_STATS_EXPECTED = new String[][]{
-		new String[]{"9", "21", "42.9%"},
-		new String[]{"2", "5", "40.0%"},
-		new String[]{"7", "20", "35.0%"}
+		new String[]{"0", "28", "0.0%"},
+		new String[]{"0", "8", "0.0%"},
+		new String[]{"0", "26", "0.0%"}  // Genhtml seems to set the branches to 0, is that a bug? I don't understand why.
 	};
 
+	/*
+		Index table for cov.gcda.info/gcov with baseline cov.gcda.info (itself)
+	 */
 	static final String[][] BASELINED_FIRST_C_IDX_INDEX_EXPECTED = new String[][]{
-		new String[]{"cov.c", "42.9%", "42.9%", "3/7", "33.3%", "1/3", "33.3%", "2/6"},
+		new String[]{"cov.c", "0.0%", "0.0%", "0/7", "0.0%", "0/3", "0.0%", "0/6"},
 		new String[]{"cov2.c", "0.0%", "0.0%", "0/7", "0.0%", "0/1", "0.0%", "0/8"},
-		new String[]{"cov3.c", "85.7%", "85.7%", "6/7", "100.0%", "1/1", "83.3%", "5/6"}
+		new String[]{"cov3.c", "0.0%", "0.0%", "0/7", "0.0%", "0/1", "0.0%", "0/6"},
+		new String[]{"cov4.c", "0.0%", "0.0%", "0/7", "0.0%", "0/3", "0.0%", "0/6"}
 	};
 
 	static final String[][] BASELINED_COV_STATS_EXPECTED = new String[][]{
-		new String[]{"3", "7", "42.9%"},
-		new String[]{"1", "3", "33.3%"},
-		new String[]{"2", "6", "33.3%"}
+		new String[]{"0", "7", "0.0%"},
+		new String[]{"0", "3", "0.0%"},
+		new String[]{"0", "6", "0.0%"}
 	};
 
 	static final String[][] BASELINED_COV2_STATS_EXPECTED = new String[][]{
@@ -449,13 +481,13 @@ public class JGenHtmlTestUtils
 	};
 
 	static final String[][] BASELINED_COV3_STATS_EXPECTED = new String[][]{
-		new String[]{"6", "7", "85.7%"},
-		new String[]{"1", "1", "100.0%"},
-		new String[]{"5", "6", "83.3%"}
+		new String[]{"0", "7", "0.0%"},
+		new String[]{"0", "1", "0.0%"},
+		new String[]{"0", "6", "0.0%"}
 	};
 
 	static final String[][] BASELINED_COV_FUNC_EXPECTED = new String[][]{
-		new String[]{"main", "2"},
+		new String[]{"main", "0"},
 		new String[]{"mainThree", "0"},
 		new String[]{"mainTwo", "0"}
 	};
@@ -465,7 +497,7 @@ public class JGenHtmlTestUtils
 	};
 
 	static final String[][] BASELINED_COV3_FUNC_EXPECTED = new String[][]{
-		new String[]{"main", "1"}
+		new String[]{"main", "0"}
 	};
 
 	/**
@@ -484,23 +516,7 @@ public class JGenHtmlTestUtils
 			transformer.transform(new SAXSource(reader, new InputSource(new FileReader(new File(location)))), result);
 			return result.getNode();
 		}
-		catch (TransformerConfigurationException ex)
-		{
-			TestCase.fail(ex.getLocalizedMessage());
-		}
-		catch (SAXNotRecognizedException ex)
-		{
-			TestCase.fail(ex.getLocalizedMessage());
-		}
-		catch (SAXNotSupportedException ex)
-		{
-			TestCase.fail(ex.getLocalizedMessage());
-		}
-		catch (TransformerException ex)
-		{
-			TestCase.fail(ex.getLocalizedMessage());
-		}
-		catch (IOException ex)
+		catch (TransformerException | SAXNotRecognizedException | IOException | SAXNotSupportedException ex)
 		{
 			TestCase.fail(ex.getLocalizedMessage());
 		}
