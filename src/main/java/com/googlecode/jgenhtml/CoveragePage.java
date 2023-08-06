@@ -135,10 +135,6 @@ public abstract class CoveragePage
 		}
 	}
 
-	/**
-	 *
-	 * @param path
-	 */
 	public void setPath(final String path)
 	{
 		String newPath = path;
@@ -236,7 +232,8 @@ public abstract class CoveragePage
 
 	/**
 	 * Writes this coverage page to the file system as XML/HTML.
-	 * @throws TransformerException
+	 * @throws TransformerException If the XML could not be transformed to HTML.
+	 * @throws IOException If the files could not be created.
 	 */
 	public void writeToFileSystem() throws TransformerException, IOException
 	{

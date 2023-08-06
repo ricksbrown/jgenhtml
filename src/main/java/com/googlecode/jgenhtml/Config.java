@@ -234,6 +234,7 @@ public final class Config
 	/**
 	 * Load command line args and config file properties into this config instance and reconfigure as appropriate.
 	 * @param argv Command line args.
+	 * @throws ParseException If the config file could not be parsed.
 	 */
 	public void initializeUserPrefs(String[] argv) throws ParseException
 	{
@@ -767,6 +768,7 @@ public final class Config
 
 	/**
 	 * Get the override CSS file.
+	 * @return The override CSS file.
 	 */
 	public File getCssFile()
 	{

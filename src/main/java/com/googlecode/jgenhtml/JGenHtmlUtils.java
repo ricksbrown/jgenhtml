@@ -88,14 +88,14 @@ public class JGenHtmlUtils
 	}
 
 	/**
-	 *
+	 * Parse the numerical values out of a line.
 	 * @param line The line with any leading whitespace removed.
-	 * @return
+	 * @return The numerical values from the line.
 	 */
 	public static int[] getLineValues(String line)
 	{
 		String[] values = extractLineValues(line);
-		int result[] = null;
+		int[] result = null;
 		if(values != null)
 		{
 			result = new int[values.length];
@@ -115,9 +115,9 @@ public class JGenHtmlUtils
 	}
 
 	/**
-	 *
+	 * Parse the  values out of a line.
 	 * @param line The line with any leading whitespace removed.
-	 * @return
+	 * @return The values from the line.
 	 */
 	public static String[] extractLineValues(String line)
 	{
@@ -192,6 +192,8 @@ public class JGenHtmlUtils
 	 * Writes a resource (e.g. CSS file) to the destination directory.
 	 * @param resourceName The name of a resource (which the classloader can find).
 	 * @param destDir The destination directory.
+	 * @param token A token to find and replace in the resource.
+	 * @param substitute The substitution for the token.
 	 */
 	protected static void writeResource(final String resourceName, final File destDir, String token, String substitute)
 	{
@@ -201,7 +203,7 @@ public class JGenHtmlUtils
 
 	/**
 	 * Writes a resource (e.g. CSS file) to the destination directory.
-	 * @param resourceName The name of a resource (which the classloader can find).
+	 * @param resource A resource file.
 	 * @param destDir The destination directory.
 	 */
 	protected static void writeResource(final File resource, final File destDir)
@@ -253,12 +255,12 @@ public class JGenHtmlUtils
 
 	/**
 	 * Same algorithm as the LCOV genhtml tool so it should always yield the same result.
-	 * @param indexPages
+	 * @param indexPages Determine the shared prefix based on the test paths.
 	 * @return The prefix to remove or null.
 	 */
 	public static String getPrefix(Collection<TestCaseSourceFile> indexPages)
 	{
-		Map<String, Integer> prefix = new HashMap<String, Integer>();
+		Map<String, Integer> prefix = new HashMap<>();
 		for(CoveragePage page : indexPages)
 		{
 			String current = page.getPath();
@@ -275,7 +277,7 @@ public class JGenHtmlUtils
 		for(CoveragePage page : indexPages)
 		{
 			String dir = page.getPath();
-			for(int i=0; i<MIN_DIRECTORIES; i++)
+			for(int i = 0; i < MIN_DIRECTORIES; i++)
 			{
 				prefix.remove(dir + '/');
 				dir = shortenPrefix(dir);
@@ -300,11 +302,7 @@ public class JGenHtmlUtils
 		// Find and return prefix with minimal sum
 		for(String current : keys)
 		{
-			if(result == null)
-			{
-				result = current;
-			}
-			else if(prefix.get(current) < prefix.get(result))
+			if(result == null || prefix.get(current) < prefix.get(result))
 			{
 				result = current;
 			}
@@ -361,6 +359,8 @@ public class JGenHtmlUtils
 	}
 
 	/**
+	 * Gets an XSLT transformer instance.
+	 * @param xsltPath The path to the XSLT file.
 	 * @return An instance of Transformer
 	 */
 	private static Transformer getTransformer(final String xsltPath)
@@ -406,15 +406,7 @@ public class JGenHtmlUtils
 			result = builder.parse(stream);
 
 		}
-		catch (SAXException ex)
-		{
-			LOGGER.log(Level.SEVERE, ex.getLocalizedMessage());
-		}
-		catch (IOException ex)
-		{
-			LOGGER.log(Level.SEVERE, ex.getLocalizedMessage());
-		}
-		catch (ParserConfigurationException ex)
+		catch (SAXException | IOException | ParserConfigurationException ex)
 		{
 			LOGGER.log(Level.SEVERE, ex.getLocalizedMessage());
 		}
@@ -439,9 +431,11 @@ public class JGenHtmlUtils
 	 * @param asXml If true will use the XML output directory, otherwise the HTML directory.
 	 * @param subPath the relative path within the XML/HTML directory.
 	 * @return The directory represented by subPath. If it did not exist it is created.
-	 * @example getTargetDir(tmpDir, true, "foo/bar");
+	 *
+	 * example getTargetDir(tmpDir, true, "foo/bar");
 	 * Would return the directory "bar" within tmpDir/xml.
-	 * @example getTargetDir(tmpDir, false, "foo/bar");
+	 *
+	 * example getTargetDir(tmpDir, false, "foo/bar");
 	 * Would return the directory "bar" within tmpDir/html.
 	 */
 	public static File getTargetDir(final File rootDir, final boolean asXml, final String subPath)
@@ -455,7 +449,8 @@ public class JGenHtmlUtils
 	 * @param rootDir The directory in which to create the subdirectory.
 	 * @param subPath the relative path within the directory.
 	 * @return The directory represented by subPath. If it did not exist it is created.
-	 * @example getTargetDir(tmpDir, "foo/bar");
+	 *
+	 * example getTargetDir(tmpDir, "foo/bar");
 	 * Would return the directory "bar" within tmpDir.
 	 */
 	public static File getTargetDir(final File rootDir, final String subPath)
