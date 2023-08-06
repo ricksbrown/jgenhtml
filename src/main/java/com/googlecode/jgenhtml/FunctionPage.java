@@ -133,8 +133,10 @@ public class FunctionPage extends CoveragePage
 	}
 
 	/**
-	 *
+	 *Add function data.
+	 * @param testCaseName The name of the test case to add function data to..
 	 * @param line The line with any leading whitespace removed.
+	 * @param isBaseline true if this is coming from a baseline file..
 	 */
 	public void addFunctionData(final String testCaseName, final String line, final boolean isBaseline)
 	{

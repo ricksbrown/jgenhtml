@@ -53,12 +53,6 @@ public final class CoverageReport
 		config = new Config();
 	}
 
-	/**
-	 * Create a new report based off these tracefiles.
-	 * @param traceFiles
-	 * @throws IOException
-	 * @throws ParserConfigurationException
-	 */
 	public CoverageReport(final String[] traceFiles) throws IOException, ParserConfigurationException
 	{
 		this.traceFiles = traceFiles;
@@ -124,9 +118,6 @@ public final class CoverageReport
 		this.descriptionsPage = descriptionsPage;
 	}
 
-	/**
-	 * Process LCOV tracefiles.
-	 */
 	public void processTraceFiles() throws IOException, ParserConfigurationException
 	{
 		for (String file : traceFiles)
@@ -260,6 +251,8 @@ public final class CoverageReport
 
 	/**
 	 * Write the coverage reports to the file system.
+	 * @throws IOException If bad things happen writing to the filesystem, duh.
+	 * @throws ParserConfigurationException Pointless javadoc comment.
 	 */
 	public void generateReports() throws IOException, ParserConfigurationException
 	{

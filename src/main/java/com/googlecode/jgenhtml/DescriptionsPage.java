@@ -100,7 +100,8 @@ public class DescriptionsPage
 	 * Writes this instance to the filesystem as a report page (xml/html).
 	 * @param rootDir The root output directory.
 	 * @param asXml If true, will write XML files (for client side transform) instead of HTML.
-	 * @throws TransformerException
+	 * @throws TransformerException If the XSLT gets angry.
+	 * @throws IOException IF there are issues writing to the file system.
 	 */
 	public void writeToFileSystem(final File rootDir, final boolean asXml) throws TransformerException, IOException
 	{

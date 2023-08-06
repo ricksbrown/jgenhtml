@@ -174,6 +174,7 @@ public class TestCaseSourceFile extends CoveragePage
 
 	/**
 	 * Add more information about this source file.
+	 * @param testCaseName The name of the test case to process the line for.
 	 * @param line a line (from the tracefile) containing data about this source file.
 	 * @param isBaseline true if this line comes from a baseline file
 	 */

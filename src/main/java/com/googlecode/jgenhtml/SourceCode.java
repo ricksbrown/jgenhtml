@@ -44,6 +44,7 @@ public abstract class SourceCode
 
 	/**
 	 * Gets names of all the test cases which contributed to the hit count of this instance.
+	 * @param hitOnly if true will only include tests that have 1 or more hits.
 	 * @return A collection of test case names.
 	 */
 	public Collection<String> getTestCaseNames(final boolean hitOnly)
@@ -52,7 +53,7 @@ public abstract class SourceCode
 		if(hitOnly)
 		{
 			Set<String> filtered = new HashSet<>(result.size());
-			for (String testName : hits.keySet())
+			for (String testName : result)
 			{
 				if(hits.get(testName) > 0)
 				{
@@ -134,6 +135,7 @@ public abstract class SourceCode
 	 * Set the number of times this code was executed/taken.
 	 * Automatically flags this instance as executable.
 	 * Must be a non-negative number.
+	 * @param testCaseName The name of the test case to set the hit count for.
 	 * @param hits The new hit count.
 	 */
 	public void setHits(final String testCaseName, final int hits)

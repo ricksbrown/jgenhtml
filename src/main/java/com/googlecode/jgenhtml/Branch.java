@@ -32,9 +32,6 @@ public class Branch extends SourceCode
 		super(true);
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	@Override
 	public Element toXml(Document document)
 	{

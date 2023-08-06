@@ -31,6 +31,7 @@ public class TopLevelIndexPage extends CoverageIndexPage
 	 * Create a new instance of this class.
 	 * @param indexPages The index pages for each of the directories containing coverage reports.
 	 * @param testName The name which identifies all the tests in this report.
+	 * @throws ParserConfigurationException If the XML could not be parsed.
 	 */
 	public TopLevelIndexPage(final String testName, final Collection<TestCaseIndexPage> indexPages) throws ParserConfigurationException
 	{

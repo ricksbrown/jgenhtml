@@ -30,7 +30,7 @@ public abstract class CoverageIndexPage extends CoveragePage
 	/**
 	 * Create a new instance.
 	 * @param testName The name to display as the test name.
-	 * @throws ParserConfigurationException
+	 * @throws ParserConfigurationException Ummm, if the parser configuration is bad?
 	 */
 	protected CoverageIndexPage(final String testName) throws ParserConfigurationException
 	{

@@ -17,7 +17,6 @@ package com.googlecode.jgenhtml.ant;
 
 import com.googlecode.jgenhtml.plugin.JGenHtmlExecutor;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
@@ -27,27 +26,13 @@ import org.apache.tools.ant.types.Path;
  * This class implements an Ant task to run jgenhtml.
  * The primary benefit of this is to run the main class without forking execution of
  * the JAR in a new JVM.
- *
- * Usage:
-	<taskdef name="jgenhtml"
-		classname="com.googlecode.jgenhtml.ant.JGenHtmlTask"
-		classpath="jgenhtml.jar"/>
-
-	<jgenhtml in="jsTestDriver.conf-coverage.dat" outdir="${outdir}" config="lcovrc"/>
-
-	OR
-
-	<jgenhtml outdir="${outdir}" config="lcovrc">
-		<path>
-			<fileset dir="${somedir}" includes="*.info"/>
-		</path>
-	</jgenhtml>
+ * Usage: see the project readme.
  *
  * @author Rick Brown
  */
 public class JGenHtmlTask extends Task
 {
-	private JGenHtmlExecutor executer = new JGenHtmlExecutor();
+	private final JGenHtmlExecutor executor = new JGenHtmlExecutor();
 	private List<Path> paths = null;
 
 	/**
@@ -58,7 +43,7 @@ public class JGenHtmlTask extends Task
 	{
 		if(this.paths == null)
 		{
-			this.paths = new ArrayList<Path>();
+			this.paths = new ArrayList<>();
 		}
 		this.paths.add(path);
 	}
@@ -68,7 +53,7 @@ public class JGenHtmlTask extends Task
 	 */
 	public void setOutdir(final String outdir)
 	{
-		executer.setOutdir(outdir);
+		executor.setOutdir(outdir);
 	}
 
 	/**
@@ -77,39 +62,35 @@ public class JGenHtmlTask extends Task
 	 */
 	public void setIn(final String in)
 	{
-		executer.addTracefile(in);
+		executor.addTracefile(in);
 	}
 
 	/**
 	 *
-	 * @param in The path to an lcovrc config file.
+	 * @param config The path to an lcovrc config file.
 	 * If not specified will check in user home directory.
 	 */
 	public void setConfig(final String config)
 	{
-		executer.setConfig(config);
+		executor.setConfig(config);
 	}
 
 	/**
 	 * Run jgenhtml with the provided attributes.
 	 * Note that if both "in" and nested path are present then both will be used.
-	 * @throws BuildException
 	 */
 	@Override
 	public void execute() throws BuildException
 	{
 		try
 		{
-			if(this.paths != null)
+			if (this.paths != null)
 			{
-				Iterator<Path> pathIterator = paths.iterator();
-				while(pathIterator.hasNext())
-				{
-					Path path = pathIterator.next();
-					executer.addTracefile(path.list());
+				for (Path path : paths) {
+					executor.addTracefile(path.list());
 				}
 			}
-			executer.execute();
+			executor.execute();
 		}
 		catch(IllegalStateException ex)
 		{
