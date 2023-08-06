@@ -4,7 +4,7 @@
 	<name>jgenhtml</name>
 	<groupId>com.googlecode.jgenhtml</groupId>
 	<artifactId>jgenhtml</artifactId>
-	<version>1.6-SNAPSHOT</version>
+	<version>1.7-SNAPSHOT</version>
 	<packaging>maven-plugin</packaging>
 	<url>https://github.com/ricksbrown/jgenhtml</url>
 
@@ -32,7 +32,8 @@
 		<connection>scm:git:https://github.com/ricksbrown/jgenhtml.git</connection>
 		<developerConnection>scm:git:https://github.com/ricksbrown/jgenhtml.git</developerConnection>
 		<url>https://github.com/ricksbrown/jgenhtml</url>
-	</scm>
+	  <tag>HEAD</tag>
+  </scm>
 
 	<developers>
 		<developer>
