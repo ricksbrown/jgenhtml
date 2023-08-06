@@ -2,6 +2,9 @@
 
 ## Release 1.6
 
+* Changed the maven goal and phase, this might break existing maven config (sorry). See the readme for example maven usage.
+* Does not crash if Test Name is empty in tracefile `TN: `
+* Minor style tweaks.
 
 ## Release 1.5
 
