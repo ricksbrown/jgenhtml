@@ -15,7 +15,7 @@ The Jar available on Maven Central is _The One Jar_ and can be used in any of th
 
 The first two scenarios require you to manually download _The One Jar_ from Maven. It will be named following the convention `jgenhtml-{version}.jar`.
 
-E.g. for version `1.5` you would go [here](https://repo.maven.apache.org/maven2/com/googlecode/jgenhtml/jgenhtml/1.5/) and download [jgenhtml-1.5.jar](https://repo.maven.apache.org/maven2/com/googlecode/jgenhtml/jgenhtml/1.5/jgenhtml-1.5.jar).
+E.g. for version `1.6` you would go [here](https://repo.maven.apache.org/maven2/com/googlecode/jgenhtml/jgenhtml/1.6/) and download [jgenhtml-1.6.jar](https://repo.maven.apache.org/maven2/com/googlecode/jgenhtml/jgenhtml/1.6/jgenhtml-1.6.jar).
 
 ## Usage
 
