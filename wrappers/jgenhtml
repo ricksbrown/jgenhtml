@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# This can be used to run java jgenhtml as a command line utility on *nix systems.
+# Download the jgenhtml jar.
+# Put this wrapper script in the same directory.
+# Make this wrapper script executable: chmod +x jgenhtml
+# Ensure the directory that contains this wrapper script is in your PATH.
+#
+# You must obviously have java installed.
+
+BASEDIR=$(dirname "$0")
+JARFILE=$(ls -t $BASEDIR/jgenhtml*.jar | head -1)
+java -jar $JARFILE $@
