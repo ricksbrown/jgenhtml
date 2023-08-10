@@ -1,5 +1,9 @@
 ## Changelog
 
+## Release 1.7
+
+* Added <skip> flag to maven mojo.
+
 ## Release 1.6
 
 * Changed the maven goal and phase, this might break existing maven config (sorry). See the readme for example maven usage.

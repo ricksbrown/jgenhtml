@@ -52,6 +52,12 @@ public class JGenHtmlMojo extends AbstractMojo
 	@Parameter(property = "jgenhtml.config")
 	private String config = null;
 
+	/**
+	 * Whether to skip execution of Mojo
+	 */
+	@Parameter(property = "jgenhtml.skip", defaultValue = "false")
+	private boolean skip;
+
 	public void setTracefiles(String[] tracefiles)
 	{
 		this.tracefiles = tracefiles;
@@ -60,6 +66,11 @@ public class JGenHtmlMojo extends AbstractMojo
 	@Override
 	public void execute() throws MojoExecutionException
 	{
+		if (this.skip)
+		{
+			getLog().info("jgenhtml:genthml plugin skipped");
+			return;
+		}
 		try
 		{
 			JGenHtmlExecutor executor = new JGenHtmlExecutor();
